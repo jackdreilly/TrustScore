@@ -46,6 +46,10 @@ $(document).ready(function(){
 		
 		$('#' + element.data('sidelink')).click();
 		
+		var powFactor = .6;
+		if (element.data('sidelink') == 'y4link')
+			powFactor = .45;
+		
 		
 		/* If it is currently active, return false and exit: */
 		if(element.find('#overLine').length) return false;
@@ -107,7 +111,7 @@ $(document).ready(function(){
 
 			  	node.append("svg:circle")
 			      .attr("r", function(d){
-			      return 1.0*Math.pow(1 + parseFloat(d.name)*10, .6);
+			      return 1.0*Math.pow(1 + parseFloat(d.name)*10, powFactor);
 			      }).style("fill", function(d) { return fill(d.group); })
 			        .call(force.drag);
 
