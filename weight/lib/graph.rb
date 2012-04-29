@@ -31,6 +31,7 @@ class Graph
     node_id = @nodes.keys.sort[-1] + 1
     @nodes[node_id] = Node.new(node_id, weight)
     @graph.add_edge(@nodes[append_to], @nodes[node_id])
+    @nodes[node_id]
   end
 
   def draw
