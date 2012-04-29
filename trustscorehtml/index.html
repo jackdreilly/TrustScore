@@ -22,6 +22,9 @@
 	<![endif]-->
 	
 	<script src="javascripts/modernizr.foundation.js"></script>
+	<script src="javascripts/jquery.min.js"></script>
+	<script src="javascripts/tabs.js"></script>
+	
 	
 	<!-- Google Fonts -->
 	<link href='http://fonts.googleapis.com/css?family=Bree+Serif' rel='stylesheet' type='text/css'>
@@ -46,8 +49,24 @@
 			</div>
 		</header>
 		<section class="row">
-			<div class="twelve columns">
-				<div>[Insert Graph Here]</div>			
+			<div class="eight columns">
+				<div id="main">
+
+				<ul class="tabContainer">
+				<!-- The jQuery generated tabs go here -->
+				</ul>
+
+				<div class="clear"></div>
+
+				<div id="tabContent">
+					<div id="contentHolder">
+				    	<!-- The AJAX fetched content goes here -->
+				    </div>
+				</div>
+
+				</div>		
+			</div>
+			<div class="four columns">
 			</div>
 		</section>		
 		<footer class="row">
