@@ -1,0 +1,159 @@
+html {height:100%;} /* for browsers to show full backgrounds when content is small */
+
+body {min-height:100%; height:auto; color:#000; font-size:11pt; line-height:1.5em; text-shadow:1px 1px 1px rgba(255,255,255,0.3); font-family:Helvetica, Arial, sans-serif;
+	background: #8a8a88 none repeat center top; /* fallback color and image */
+	background-image: -moz-radial-gradient(50% 700px, circle, #f4f6f2 0, #8a8a88 1280px);
+	background-image: -webkit-radial-gradient(50% 700px, circle, #f4f6f2 0, #8a8a88 1280px);
+	background-image: -ms-radial-gradient(50% 700px, circle, #f4f6f2 0, #8a8a88 1280px);
+	background-image: radial-gradient(50% 700px, circle, #f4f6f2 0, #8a8a88 1280px);
+	background-size: 2520px 2520px;
+	}
+	
+p {font-size:11pt; line-height:1.5em; margin-top:9px;}
+
+h1, h2, h3, h4, h5, h6 {font-weight:normal;}
+h2 {font-size:36px; color:#000; letter-spacing:0.2em; font-family:'Bree Serif', serif; margin-right:36px;}
+h2 span {color:#ee5900;}
+h2 span span{position:relative; top:-9px;}
+h2 span span:after {content:""; display:block; position:absolute; bottom:0; z-index:1; width:0.6em; height:0.125em; background:#000; box-shadow:1px 1px 1px rgba(255,255,255,0.3);}
+a {color:#fff; text-shadow:1px 1px 1px rgba(0,0,0,0.1);}
+a:hover {color:#eee;}
+.row {padding:0; margin:0; border:0; width:100%; max-width:100%; min-width:0;}
+
+header.row,
+footer.row {margin-top:18px; margin-bottom:18px;}
+
+header.row {border-bottom:1px solid #fff;}
+header h2 {float:left;}
+header .tabContainer {float:right; margin:0; letter-spacing:0.05em; font-weight:bold; display:block; height:60px;}
+header .tabContainer li {float:left; padding:6px 18px; margin:0;}
+header .tabContainer li:first-of-type {padding-left:0;}
+header .tabContainer li:last-of-type {padding-right:0;}
+header .tabContainer li span {font-weight:normal;}
+header .tabContainer li a.tab {border:0 none; display:block; box-shadow:none; text-shadow:1px 1px 1px rgba(0,0,0,0.1); padding:6px 12px; border-radius:6px; background:#777;}
+header .tabContainer li a.tab:hover {background-color:#666;}
+
+footer.row {border-top:1px solid #fff;}
+footer.row p {color:#555; font-size:10pt;}
+
+<<<<<<< HEAD
+.tabContainer{
+	/* The UL */
+	float:right;
+	padding-right:13px;
+}
+
+#contentHolder{
+	background-color:#EEEEEE;
+	border:2px solid #FFFFFF;
+	height:500px;
+	margin:20px;
+	
+	color:#444444;
+	padding:15px;
+}
+
+#tabContent{
+	background-color:#333;
+	border:1px solid #444;
+	margin-top:-15px;
+	width:100%;
+}
+
+#tabContent, .tabContainer li a,#contentHolder{
+	-webkit-box-shadow:0 0 2px black;
+	-moz-box-shadow:0 0 2px black;
+	box-shadow:0 0 2px black;
+}
+
+.tabContainer li{
+	/* This will arrange the LI-s next to each other */
+	display:inline;
+}
+
+.tabContainer li a,.tabContainer li a:visited{
+	/* Styling the hyperlinks of the tabs as colorful buttons */
+	
+	float:left;
+	font-size:18px;
+	
+	/* display:block allows for additinal CSS rules to take effect, such as paddings: */
+	display:block;
+	
+	padding:7px 16px 1px;
+	margin:4px 5px;
+	height:29px;
+	
+	/* Giving positioning */
+	position:relative;
+	
+	/* CSS3 text-shadow */
+	text-shadow:1px 1px 1px #CCCCCC;
+}
+
+#overLine{
+	/* The line above the active button. */
+	position:absolute;
+
+	height:1px;
+	background-color:white;
+	width:90px;
+	
+	float:left;
+	left:1px;
+	top:-5px;
+	overflow:hidden;
+}
+
+#main{
+	margin:0 auto;
+	position:relative;
+	width:700px;
+}
+
+
+ul .left{
+	/* The left span in the hyperlink */
+	
+	height:37px;
+	left:0;
+	position:absolute;
+	top:0;
+	width:10px;
+}
+
+ul .right{
+	/* The right span in the hyperlink */
+	
+	height:37px;
+	right:0;
+	position:absolute;
+	top:0;
+	width:10px;
+}
+
+/* Styling the colors individually: */
+
+ul a.green{	background:url(img/green_mid.png) repeat-x top center;	color:#24570f;}
+ul a.green span.left{ background:url(img/green_left.png) no-repeat left top;}
+ul a.green span.right{ background:url(img/green_right.png) no-repeat right top;}
+
+
+ul a.blue{	background:url(img/blue_mid.png) repeat-x top center;	color:#03426e;}
+ul a.blue span.left{ background:url(img/blue_left.png) no-repeat left top;}
+ul a.blue span.right{ background:url(img/blue_right.png) no-repeat right top;}
+
+
+ul a.orange{	background:url(img/orange_mid.png) repeat-x top center;	color:#724104;}
+ul a.orange span.left{ background:url(img/orange_left.png) no-repeat left top;}
+ul a.orange span.right{ background:url(img/orange_right.png) no-repeat right top;}
+
+
+ul a.red{	background:url(img/red_mid.png) repeat-x top center;	color:#6f0100;}
+ul a.red span.left{ background:url(img/red_left.png) no-repeat left top;}
+ul a.red span.right{ background:url(img/red_right.png) no-repeat right top;}
+=======
+#overLine{display:none !important;}
+>>>>>>> nathanhtml
+
+
