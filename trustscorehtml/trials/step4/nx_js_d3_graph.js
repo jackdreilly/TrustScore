@@ -33,7 +33,7 @@ d3.json("nx_js_d3_graph.json", function(json) {
 
   	node.append("svg:circle")
       .attr("r", function(d){
-      return 1.5*Math.pow(1 + parseFloat(d.name)*10, .6);
+      return 1.5*Math.pow(1 + parseFloat(d.name)*10, .45);
       }).style("fill", function(d) { return fill(d.group); })
         .call(force.drag);
 

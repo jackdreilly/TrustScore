@@ -1,7 +1,7 @@
-from networkx import DiGraph
+from networkx import Graph
 from person import Person
 
-class Society(DiGraph):
+class Society(Graph):
 
     def __init__(self, *args, **kwargs):
 	super(Society, self).__init__(*args,**kwargs)        

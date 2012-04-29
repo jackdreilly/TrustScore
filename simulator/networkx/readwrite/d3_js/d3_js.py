@@ -118,7 +118,7 @@ def d3_json(G, group=None):
 	return graph_json
 	
 def export_d3_js(G, files_dir='nx_js_d3_graph', graphname="nx_js_d3_graph", group='group', 
-				width=960, height=500, node_labels=False, encoding="utf-8"):
+				width=960, height=1000, node_labels=False, encoding="utf-8"):
 	"""
 	A function that exports a NetworkX graph as an interavtice D3.js object.  
 	The function builds a folder, containing the graph's formatted JSON, the D3.js 
