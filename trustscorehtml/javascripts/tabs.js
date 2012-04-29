@@ -63,9 +63,10 @@ $(document).ready(function(){
 		if(!element.data('cache'))
 		{	
 			/* If no cache is present, show the gif preloader and run an AJAX request: */
+			$('#contentHolder').html('');
 
-			var w = 800,
-			    h = 500,
+			var w = 400,
+			    h = 400,
 			    fill = d3.scale.category10();
 
 			var vis = d3.select("#contentHolder")
