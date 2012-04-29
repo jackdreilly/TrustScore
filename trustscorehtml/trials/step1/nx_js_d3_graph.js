@@ -1,5 +1,5 @@
-var w = 960,
-    h = 1000,
+var w = 300,
+    h = 150,
     fill = d3.scale.category10();
 
 var vis = d3.select("#chart")
