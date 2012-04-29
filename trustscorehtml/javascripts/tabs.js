@@ -3,10 +3,10 @@ $(document).ready(function(){
 	
 	/* Defining an array with the tab text and AJAX pages: */
 	var Tabs = {
-		'Tab one'	: 'trials/step1/nx_js_d3_graph.json',
-		'Tab two'	: 'trials/step2/nx_js_d3_graph.json',
-		'Tab three'	: 'trials/step3/nx_js_d3_graph.json',
-		'Tab four'	: 'trials/step4/nx_js_d3_graph.json',
+		'Year 1'	: 'trials/step1/nx_js_d3_graph.json',
+		'Year 2'	: 'trials/step2/nx_js_d3_graph.json',
+		'Year 3'	: 'trials/step3/nx_js_d3_graph.json',
+		'Year 4'	: 'trials/step4/nx_js_d3_graph.json',
 	}
 	
 	/* The available colors for the tabs: */
@@ -63,7 +63,6 @@ $(document).ready(function(){
 		if(!element.data('cache'))
 		{	
 			/* If no cache is present, show the gif preloader and run an AJAX request: */
-			$('#contentHolder').html('<img src="img/ajax_preloader.gif" width="64" height="64" class="preloader" />');
 
 			var w = 800,
 			    h = 500,
