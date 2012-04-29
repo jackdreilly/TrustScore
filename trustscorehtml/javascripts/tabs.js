@@ -65,8 +65,8 @@ $(document).ready(function(){
 			/* If no cache is present, show the gif preloader and run an AJAX request: */
 			$('#contentHolder').html('');
 
-			var w = 400,
-			    h = 400,
+			var w = 700,
+			    h = 600,
 			    fill = d3.scale.category10();
 
 			var vis = d3.select("#contentHolder")
@@ -76,7 +76,7 @@ $(document).ready(function(){
 
 			d3.json(element.data('page'), function(json) {
 			  var force = d3.layout.force()
-			      .charge(-125)
+			      .charge(-200)
 			      .linkDistance(50)
 			      .nodes(json.nodes)
 			      .links(json.links)
@@ -87,7 +87,7 @@ $(document).ready(function(){
 			      .data(json.links)
 			    .enter().append("svg:line")
 			      .attr("class", "link")
-			      .style("stroke-width", function(d) { return Math.sqrt(d.value); })
+			      .style("stroke-width", 1.0)
 			      .attr("x1", function(d) { return d.source.x; })
 			      .attr("y1", function(d) { return d.source.y; })
 			      .attr("x2", function(d) { return d.target.x; })
@@ -100,7 +100,7 @@ $(document).ready(function(){
 
 			  	node.append("svg:circle")
 			      .attr("r", function(d){
-			      return 1.5*Math.pow(1 + parseFloat(d.name)*10, .6);
+			      return 1.0*Math.pow(1 + parseFloat(d.name)*10, .6);
 			      }).style("fill", function(d) { return fill(d.group); })
 			        .call(force.drag);
 
