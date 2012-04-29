@@ -81,9 +81,6 @@ class Loaner:
             self.simulate_round(Person.random_loanee())
 
 def main():
-    n_trustees = 5
-    loaner = Loaner(LoanerSociety.random_society(n_trustees))
-    loaner.sim_n_rounds(10)
     return loaner
     
     
