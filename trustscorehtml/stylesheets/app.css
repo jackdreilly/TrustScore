@@ -1,0 +1,9 @@
+/* Foundation v2.2.1 http://foundation.zurb.com */
+
+body {background:#e5e5e5; text-shadow:1px 1px 0 rgba(0,0,0,0.1);}
+h1, h2, h3, h4, h5, h6 {font-weight:normal;}
+
+.columns {margin:9px 0;}
+
+header.row {border-bottom:1px solid #ccc; margin-bottom:18px;}
+.row.content {min-height:300px;}
