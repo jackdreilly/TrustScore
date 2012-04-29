@@ -1,10 +1,6 @@
 TrustScore
 ==========
 
-Installing pip:
+Simulation engine exists within simulation/ folder.
 
-easy_install pip
-
-installing requirements:
-
-pip install -r requirements.txt
+Presentation of simulation results given in webpage in other folder
