@@ -73,7 +73,7 @@ $(document).ready(function(){
 			$('#contentHolder').html('');
 
 			var w = 700,
-			    h = 600,
+			    h = 500,
 			    fill = d3.scale.category10();
 
 			var vis = d3.select("#contentHolder")
