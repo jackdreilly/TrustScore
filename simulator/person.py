@@ -33,3 +33,10 @@ class Person:
     def random_loanee():
 	return Person(Nature.gen_random(Nature.tw_avg, Nature.tw_variance))
     
+    def __repr__(self):
+        return str(self.tw)
+
+    def __str__(self):
+        return self.__repr__()
+
+    
