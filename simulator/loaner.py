@@ -39,6 +39,9 @@ class Loaner:
 	return loanee    
 
 if __name__ == "__main__":
-    n_trustees = 10
+    n_trustees = 100
     loaner = Loaner(LoanerSociety.random_society(n_trustees))
-    print loaner
+    loanee = Person.random_loanee()
+    evaluated_loanee = loaner.classified_loanee(loanee)
+    print evaluated_loanee.will_fund
+    print evaluated_loanee.endorsers

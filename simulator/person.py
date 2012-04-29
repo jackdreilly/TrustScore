@@ -1,5 +1,6 @@
 from nature import Nature
-
+import random
+import math
 class Person:
     tw_weight = 1.0
     cs_weight = 1.0
