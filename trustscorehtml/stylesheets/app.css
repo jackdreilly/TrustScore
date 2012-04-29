@@ -1,9 +1,38 @@
 /* Foundation v2.2.1 http://foundation.zurb.com */
 
-body {background:#e5e5e5; text-shadow:1px 1px 0 rgba(0,0,0,0.1);}
+html {height:100%;} /* for browsers to show full backgrounds when content is small */
+
+body {min-height:100%; height:auto; color:#000; font-size:11pt; line-height:1.5em; text-shadow:1px 1px 1px rgba(255,255,255,0.3); font-family:Helvetica, Arial, sans-serif;
+	background: #8a8a88 url(images/bg.gif) repeat center top; /* fallback color and image */
+	background-image: -moz-radial-gradient(50% 700px, circle, #f4f6f2 0, #8a8a88 1280px);
+	background-image: -webkit-radial-gradient(50% 700px, circle, #f4f6f2 0, #8a8a88 1280px);
+	background-image: -ms-radial-gradient(50% 700px, circle, #f4f6f2 0, #8a8a88 1280px);
+	background-image: radial-gradient(50% 700px, circle, #f4f6f2 0, #8a8a88 1280px);
+	background-size: 2520px 2520px;
+	}
+	
+p {font-size:11pt; line-height:1.5em; margin-top:9px;}
+
 h1, h2, h3, h4, h5, h6 {font-weight:normal;}
+h2 {font-size:36px; color:#000; letter-spacing:0.2em; font-family:'Bree Serif', serif; margin-right:36px;}
+h2 span {color:#ee5900;}
+h2 span span{position:relative; top:-9px;}
+h2 span span:after {content:""; display:block; position:absolute; bottom:0; z-index:1; width:0.6em; height:0.1em; background:#000; border-bottom:1px solid rgba(255,255,255,0.3);}
+a {color:#fff; text-shadow:1px 1px 1px rgba(0,0,0,0.1);}
+a:hover {color:#eee;}
+.row {padding:0; margin:0; border:0; width:100%; max-width:100%; min-width:0;}
+.button.orange {background-color:#ee5900; border:0 none; box-shadow:none; text-shadow:1px 1px 1px rgba(0,0,0,0.1);}
+.button.orange:hover {background-color:#dd5500;}
 
-.columns {margin:9px 0;}
+header.row,
+footer.row {margin-top:18px; margin-bottom:18px;}
 
-header.row {border-bottom:1px solid #ccc; margin-bottom:18px;}
-.row.content {min-height:300px;}
+header.row {border-bottom:1px solid #fff;}
+header h2 {float:left;}
+header ul {float:right;}
+header ul {margin:9px 0 0; letter-spacing:0.05em; font-weight:bold;}
+header ul li {float:left; padding:6px 18px; margin:0; border-right:;}
+header ul li span {font-weight:normal;}
+header ul li:last-of-type {padding:0 0 0 18px; border:0;}
+
+footer.row {border-top:1px solid #fff;}
