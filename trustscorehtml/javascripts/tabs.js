@@ -1,6 +1,8 @@
 $(document).ready(function(){
 	/* This code is executed after the DOM has been completely loaded */
 	
+	$( "#accordion" ).accordion();
+	
 	/* Defining an array with the tab text and AJAX pages: */
 	var Tabs = {
 		'Year 1'	: 'trials/step1/nx_js_d3_graph.json',
@@ -22,12 +24,14 @@ $(document).ready(function(){
 	
 	/* Looping through the Tabs object: */
 	var z=0;
+	var counter = 0;
 	$.each(Tabs,function(i,j){
+		counter ++;
 		/* Sequentially creating the tabs and assigning a color from the array: */
 		var tmp = $('<li><a href="#" class="tab '+colors[(z++%4)]+'">'+i+' <span class="left" /><span class="right" /></a></li>');
 		
 		/* Setting the page data for each hyperlink: */
-		tmp.find('a').data('page',j);
+		tmp.find('a').data('page',j).data('sidelink','y' + counter + 'link');
 		
 		/* Adding the tab to the UL container: */
 		$('ul.tabContainer').append(tmp);
@@ -39,6 +43,9 @@ $(document).ready(function(){
 	the_tabs.click(function(e){
 		/* "this" points to the clicked tab hyperlink: */
 		var element = $(this);
+		
+		$('#' + element.data('sidelink')).click();
+		
 		
 		/* If it is currently active, return false and exit: */
 		if(element.find('#overLine').length) return false;
