@@ -11,7 +11,7 @@ class ExternalInformation(AgentBase):
 
 class CreditScore(ExternalInformation):
     """docstring for CreditScore"""    
-    def __init__(self, credit_score, **kwargs):
+    def __init__(self, credit_score = None, **kwargs):
         self.credit_score = credit_score        
         super(CreditScore, self).__init__(**kwargs)
     
@@ -35,6 +35,9 @@ class Loan(object):
         
     def is_active(self):
         raise NotImplementedError('abstract')
+        
+    def funder(self):
+        raise NotImplementedError('abstract')        
 
 class Borrower(ExternalInformation):
     """docstring for Borrower"""
