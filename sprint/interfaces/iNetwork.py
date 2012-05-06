@@ -11,11 +11,7 @@ class Relationship(object):
     def couple(self):
         """ the two considered """
         return set(self.person_a(), self.person_b())
-        
-        
-    def distance(self):
-        """ how many hops away are the two people"""
-        raise NotImplementedError("abstract")
+
 
 class Network(object):
     """  """
