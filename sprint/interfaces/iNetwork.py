@@ -20,5 +20,5 @@ class Network(object):
         raise NotImplementedError("abstract")
         
     def bfs_iterator(self, endorser):
-        """ return an iterator of Relationship's, since distance is a needed metric not usually stored in bfs operations, but easy to do"""        
+        """ return an iterator of Relationship's, since distance is a needed metric not usually stored in bfs operations, but easy to do""" 
         raise NotImplementedError("abstract") 
