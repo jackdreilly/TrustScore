@@ -1,13 +1,15 @@
 Django==1.4
+URLObject==2.0.1
 decorator==3.3.3
 django-tastypie==0.9.11
+djangorestframework==0.3.3
 httplib2==0.7.4
 jexp==0.1.2
 lucene-querybuilder==0.1.5
 mimeparse==0.1.3
-neo4django==0.1.5
+-e git+https://github.com/scholrly/neo4django@03b247d7911753a7e7bf5771a72a41137919f85e#egg=neo4django-dev
 neo4jrestclient==1.6.2
 networkx==1.6
-python-dateutil==1.5
+python-dateutil==2.1
+six==1.1.0
 wsgiref==0.1.2
-djangorestframework==0.3.3
