@@ -29,7 +29,6 @@ class EvaluationTest(NodeModelTestCase):
         e1 = LoanEvaluation.objects.create(weight=1, given_by=p1, given_to=p2)
         e2 = LoanEvaluation.objects.create(weight=1, given_by=p3, given_to=p2)
         e3 = LoanEvaluation.objects.create(weight=1, given_by=p1, given_to=p3)
-        time.sleep(1000)
         
         class NannyEvaluation(Evaluation):
             def __init__(self, **kwargs):
