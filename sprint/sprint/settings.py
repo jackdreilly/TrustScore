@@ -124,6 +124,8 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'tastypie',
     'trustscore',
+    'loans',
+    'endorsenet',
     'graph',
 )
 
