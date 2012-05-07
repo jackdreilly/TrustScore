@@ -124,6 +124,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'tastypie',
     'trustscore',
+    'graph',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -154,3 +155,24 @@ LOGGING = {
         },
     }
 }
+
+NEO4J_DATABASES = {
+    'default' : {
+        'HOST':'localhost',
+        'PORT':7474,
+        'ENDPOINT':'/db/data'
+    }
+}
+
+NEO4J_TEST_DATABASES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 7474,
+        'ENDPOINT': '/db/data',
+        'OPTIONS': {
+            'CLEANDB_URI': '/db/data/cleandb/secret-key',
+        }
+    }
+}
+
+DATABASE_ROUTERS = ['neo4django.utils.Neo4djangoIntegrationRouter']

@@ -10,3 +10,4 @@ neo4jrestclient==1.6.2
 networkx==1.6
 python-dateutil==1.5
 wsgiref==0.1.2
+djangorestframework=0.3.3
