@@ -3,13 +3,15 @@ from iBase import AgentBase
 class Endorser(AgentBase):
     """Interface to what an endorser should be able to do"""
     
-    def endorsement(self, loan):
+    def endorsement(self, endorsable):
         """loan should implement Loan interface, and method should return an Endorsement"""
         raise NotImplementedError('abstract')
 
 class Endorsement(object):
     """  generic base endorsement """
-    def __init__(self, endorser, endorsee, *args, **kwargs):
+    def __init__(self, endorser=None, endorsee=None, *args, **kwargs):
+        if endorser is None or endorsee is None:
+            return
         self._endorser = endorser
         self._endorsee = endorsee
         super(Endorsement, self).__init__()

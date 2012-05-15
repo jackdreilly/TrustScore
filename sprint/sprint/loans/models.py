@@ -1,6 +1,6 @@
 from django.db import models
 from interfaces import iAgent, iNetwork, iLoan
-from endorsenet.models import EndorseNode
+from endorsenet.models import EndorseNode, EndorsableNode
 # Create your models here.
 
 
@@ -22,15 +22,38 @@ class FunderModel(EndorseNode, iAgent.Funder):
         pass
 
 
-class LoanModel(models.Model, iLoan.Loan):
+class LoanModel(EndorsableNode, iLoan.Loan):
     
     borrower = models.ForeignKey(BorrowerModel, related_name='loan_borrower')
     amount = models.FloatField()
-    endorsers = models.ManyToManyField(EndorseNode)
     outcome = models.BooleanField()
     is_active = models.BooleanField()
-    funder = models.ForeignKey(FunderModel, related_name = 'loan_funder')
+    funders = models.ManyToManyField(FunderModel, related_name = 'loan_funder',null=True, blank = True)
+
+    def __repr__(self):
+        return 'borrower {0}, amount {1}'.format(self.borrower, self.amount)
+
+    def __unicode__(self):
+        return self.__repr__()
+
+    def __str__(self):
+        return self.__repr__()
+
+
     
 class AgentModel(BorrowerModel, FunderModel):
-    pass
+    def __repr__(self):
+        return '{0}, cs: {1}'.format(self.username, self.credit_score_field)
+
+
+    def __unicode__(self):
+        return self.__repr__()
+
+    def __str__(self):
+        return self.__repr__()
+
+    def fund_loan(self, loan):
+        loan.funders = self
+        loan.save()
+
     

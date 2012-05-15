@@ -6,3 +6,4 @@ class PersonResource(ModelResource):
     
 class EvaluationResource(ModelResource):
     model = LoanEvaluation
+

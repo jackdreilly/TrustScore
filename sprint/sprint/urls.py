@@ -7,7 +7,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'sprint.views.home', name='home'),
-    url(r'^ts/', include('trustscore.urls')),
+    url(r'^loans/', include('loans.urls')),
     url(r'^graph/', include('graph.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

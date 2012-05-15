@@ -1,3 +1,4 @@
+
 class AgentBase(object):
     def __init__(self, **kwargs):
         """docstring for __init__"""

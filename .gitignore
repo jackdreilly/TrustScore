@@ -29,3 +29,5 @@ pip-log.txt
 .mr.developer.cfg
 
 *#
+
+sprint/sprint/constants.py

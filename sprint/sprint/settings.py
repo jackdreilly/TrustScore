@@ -123,7 +123,6 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'tastypie',
-    'trustscore',
     'loans',
     'endorsenet',
     'graph',
@@ -166,13 +165,15 @@ NEO4J_DATABASES = {
     }
 }
 
+from constants import N4J_ENDPOINT, N4J_CLEANDB_URI
+
 NEO4J_TEST_DATABASES = {
     'default': {
         'HOST': 'localhost',
         'PORT': 7474,
-        'ENDPOINT': '/db/data',
+        'ENDPOINT': N4J_ENDPOINT,
         'OPTIONS': {
-            'CLEANDB_URI': '/db/data/cleandb/secret-key',
+            'CLEANDB_URI': N4J_CLEANDB_URI,
         }
     }
 }
