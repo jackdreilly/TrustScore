@@ -8,25 +8,26 @@ import math
 class LoanerSociety(Society):
     factor = .4
     init_score = 1.0
+    
     def __init__(self,*args,**kwargs):
-	super(LoanerSociety, self).__init__(*args,**kwargs)
-	LoanerSociety.init_society(self)
+	    super(LoanerSociety, self).__init__(*args,**kwargs)
+        LoanerSociety.init_society(self)
 	
     @staticmethod
     def init_society(society):
-	for node in society.nodes():
-	    node.loaner_score = LoanerSociety.init_score
+        for node in society.nodes():
+            node.loaner_score = LoanerSociety.init_score
 	    
     @staticmethod
     def random_society(n_trustees):
-	trustees = [Person.random_loanee() for i in range(n_trustees)]
-	edges = []
-	for trustee in trustees:
-	    for other in random.sample(trustees, int(math.ceil(len(trustees)*trustee.friendliness))):
-		if other == trustee:
-		    continue
-		edges.append((trustee, other))
-	return LoanerSociety(edges)
+        trustees = [Person.random_loanee() for i in range(n_trustees)]
+        edges = []
+        for trustee in trustees:
+            for other in random.sample(trustees, int(math.ceil(len(trustees)*trustee.friendliness))):
+                if other == trustee:
+                    continue
+                    edges.append((trustee, other))
+                    return LoanerSociety(edges)
 
     def modify_score(self, guy, score, distance, loaner):
         loaner.update_loaner_score(guy, guy.loaner_score+ guy.loaner_score*LoanerSociety.factor*score/(2.0**distance))

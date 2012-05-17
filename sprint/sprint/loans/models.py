@@ -38,6 +38,10 @@ class LoanModel(EndorsableNode, iLoan.Loan):
 
     def __str__(self):
         return self.__repr__()
+        
+    def endorsers(self):
+        ends = super(LoanModel, self).endorsers()
+        return ends + self.borrower.endorsers()
 
 
     

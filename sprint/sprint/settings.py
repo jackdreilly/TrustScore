@@ -126,6 +126,7 @@ INSTALLED_APPS = (
     'loans',
     'endorsenet',
     'demo',
+    'trust',
 )
 
 # A sample logging configuration. The only tangible logging
