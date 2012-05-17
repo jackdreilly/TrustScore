@@ -1,11 +1,12 @@
-<h1>{{ object.first_name }} {{ object.last_name }}</h1>
+<h1>{{object.username}}</h1>
 Credit Score: {{ object.credit_score_field }}
 
-<table>
+<h2>Endorsements</h2>
+<table border=2>
 
 {% for endorsement in endorsements %}
 	<tr>
-		<td>{{ endorsement.endorse_this.first_name }} {{ endorsement.endorse_this.last_name }}</td>
+		<td>{{endorsement.endorse_this.username}}</td>
 		<td>{{ endorsement.score}}</td>
 	</tr>
 {% endfor %}

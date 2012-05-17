@@ -10,5 +10,7 @@ class AgentView(DetailView):
     def get_context_data(self, **kwargs):
         data = super(AgentView, self).get_context_data(**kwargs)
         agent = data['object'];
-        data['endorsers'] = agent.endorsers()
+        data['endorsements'] = agent.endorsements()
+        print data
+        return data
     
