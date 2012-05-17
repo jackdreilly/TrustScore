@@ -1,33 +1,1 @@
-from sprint.endorsenet.models import *
-from sprint.loans.models import *
-import random
-
-names = ('jack','jill','bill','ned', 'jane')
-
-agents = []
-for name in names:
-    agent = AgentModel()
-    agent.username = name
-    agent.password = name
-    agent.credit_score_field = random.randint(10,1000)
-    agent.save()
-    agents.append(agent)
-
-for agent in agents:
-    print agent.username
-    agent.save()
-    
-    
-endorsers = random.sample(agents,4)
-endorsees = random.sample(agents,4)
-
-for er, ee in zip(endorsers,endorsees):
-    endorsement = er.endorsement(ee)
-    endorsement.save()
-    
-loans = [LoanModel(borrower = random.choice(agents), amount = random.randint(10,100)) for _ in range(10)]
-
-
-for loan in loans:
-    loan.save()
-    
+from sprint.endorsenet.models import *from sprint.loans.models import *import randomnet = get_network()agents = AgentModel.objects.all()def make_agents():    """docstring for make_agents"""    passdef make_endorsements(n_ends=50):    """docstring for make_endorsements"""    for _ in range(n_ends):        endorser = random.choice(agents)        endorsee = random.choice(agents)        while endorser is endorsee:            endorsee = random.choice(agents)        endorsement = endorser.endorsement(endorsee)        endorsement.save()def look_at_bfs():    for agent in agents:        print net.bfs_iterator(agent)        def main():    """docstring for main"""    look_at_bfs()        if __name__ == '__main__':    main()

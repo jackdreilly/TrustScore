@@ -65,9 +65,9 @@ class EndorserNetwork(iNetwork):
     """ note that endorsers may endorse non endorsers (eg loans), this should be accounted for """
     
     def neighbors(self, node):
-    	return [endorsement.endorse_that 
+    	return [endorsement.endorse_that.endorsenode 
             for endorsement in node.endorse_this.all() 
-            if isinstance(endorsement.endorse_that, EndorseNode)]
+            if hasattr(endorsement.endorse_that, 'endorsenode')]
 
     def nodes(self):
     	return EndorseNode.objects.all()
@@ -81,11 +81,16 @@ class EndorserNetwork(iNetwork):
             cur = depths[-1]
             next = set()
             depths.append(next)
+            print 'checking cur'
             for guy in cur:
-                neighbors = self.neighbors(guy)
-                heap.update(neighbors)
-                next.update(set(neighbors).difference(heap))
-        return [(guy, ind + 1) for ind, pack in enumerate(depths) for guy in pack]
+                print 'checking guy', guy
+                endorsers = guy.endorsers()
+                print 'guy endorsers', endorsers
+                next.update(set(endorsers).difference(heap))
+                print 'next', next
+                heap.update(endorsers)
+                print 'heap', heap
+        return [(guy, ind) for ind, pack in enumerate(depths) for guy in pack]
 
 
 
