@@ -21,20 +21,11 @@ for name in names:
     agent.username = name
     agent.password = name
     agent.credit_score_field = random.randint(10,1000)
-    agent.save()
     agents.append(agent)
 
 for agent in agents:
     print agent.username
     agent.save()
-    
-    
-endorsers = random.sample(agents,4)
-endorsees = random.sample(agents,4)
-
-for er, ee in zip(endorsers,endorsees):
-    endorsement = er.endorsement(ee)
-    endorsement.save()
     
 n_loans = 10
     

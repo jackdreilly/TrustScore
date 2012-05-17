@@ -1,5 +1,5 @@
 from django.db import models
-from interfaces.iEndorsement import Endorser, Endorsement
+from interfaces.iEndorsement import Endorser, ScoreEndorsement
 from interfaces.iNetwork import Network as iNetwork
 from django.contrib.auth.models import User
 
@@ -20,6 +20,9 @@ class EndorsableNode(models.Model):
 
     def endorsers(self):
         return [end.endorse_this for end in self.endorse_that.all()]
+        
+    def endorsements(self):
+        return self.endorse_that.all()
 
 
 
@@ -28,24 +31,31 @@ class EndorseNode(User, EndorsableNode, Endorser):
     def __init__(self, *args, **kwargs):
         super(EndorseNode, self).__init__(*args, **kwargs)
 
-    def endorsement(self, endorsable):
-        return EndorseEdge(endorser=self, endorsee=endorsable)
+    def endorsement(self, endorsable, score=0):
+        return EndorseEdge(endorser=self, endorsee=endorsable, score=score)
 
     
-class EndorseEdge(models.Model, Endorsement):
+class EndorseEdge(models.Model, ScoreEndorsement):
     # I do not use this yet, but something should inherit the Endorsement interface
     endorse_this = models.ForeignKey(EndorseNode, related_name='endorse_this')
     endorse_that = models.ForeignKey(EndorsableNode, related_name='endorse_that')
-
+    score = models.FloatField()
+    
     def __init__(self,*args,**kwargs):
     	if len(kwargs) is 0:
     		models.Model.__init__(self, *args,**kwargs)
     		return
     	endorser = kwargs.pop('endorser')
     	endorsee = kwargs.pop('endorsee')
-    	Endorsement.__init__(self, endorser, endorsee)
+    	score = kwargs['score']
+    	
+    	ScoreEndorsement.__init__(self, score=score, endorsee=endorsee, endorser=endorser)
+    	
     	kwargs['endorse_this'] = endorser
     	kwargs['endorse_that'] = endorsee
+    	
+    	print(kwargs)
+    	
     	models.Model.__init__(self, *args,**kwargs)
 
     def __repr__(self):

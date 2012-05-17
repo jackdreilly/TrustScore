@@ -1,0 +1,14 @@
+<h1>{{ object.first_name }} {{ object.last_name }}</h1>
+Credit Score: {{ object.credit_score_field }}
+
+<table>
+
+{% for endorsement in endorsements %}
+	<tr>
+		<td>{{ endorsement.endorse_this.first_name }} {{ endorsement.endorse_this.last_name }}</td>
+		<td>{{ endorsement.score}}</td>
+	</tr>
+{% endfor %}
+
+</table>
+

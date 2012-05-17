@@ -8,7 +8,7 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'sprint.views.home', name='home'),
     url(r'^loans/', include('loans.urls')),
-    url(r'^graph/', include('graph.urls')),
+    url(r'^demo/', include('demo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

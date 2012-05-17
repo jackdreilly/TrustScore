@@ -125,7 +125,7 @@ INSTALLED_APPS = (
     'tastypie',
     'loans',
     'endorsenet',
-    'graph',
+    'demo',
 )
 
 # A sample logging configuration. The only tangible logging
