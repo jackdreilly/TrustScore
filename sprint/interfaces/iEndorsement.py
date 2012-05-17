@@ -24,8 +24,9 @@ class Endorsement(object):
 
 class ScoreEndorsement(Endorsement):
     """ generic endorsement with score """
-    def __init__(self, score, *args, **kwargs):
-        self.score = score
+    def __init__(self, score = None, *args, **kwargs):
+        if score is not None:
+            self.score = score
         super(ScoreEndorsement, self).__init__(*args, **kwargs)
         
 class BinaryEndorsement(ScoreEndorsement):

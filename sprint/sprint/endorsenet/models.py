@@ -54,7 +54,8 @@ class EndorseEdge(models.Model, ScoreEndorsement):
     	kwargs['endorse_this'] = endorser
     	kwargs['endorse_that'] = endorsee
     	
-    	print(kwargs)
+    	print kwargs
+        print args
     	
     	models.Model.__init__(self, *args,**kwargs)
 
