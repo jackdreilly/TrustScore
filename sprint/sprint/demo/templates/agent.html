@@ -5,42 +5,27 @@
 {% block content %}
 
 <div class="row">
-	<div id="name" class="span4 well">
-		<h1>{{object.username}}</h1>
-		<dl class="dl-horizontal">
-		<dt>
-			Credit Score
-		</dt>
-		<dd>
-			{{ object.credit_score_field }}
-		</dd>
-		<dt>
-			Trust Score
-		</dt>
-		<dd>
-			{{ object.trust_score }}
-		</dd>
-		</dl>		
+	<div id="name" class="span3 well">
+		{% render_agent_info agent %}
+	</div>
+	<div id="endorsements" class="span3">
+		{% render_endorsements endorsements %}
+	</div>
+	<div id="graph" class="span4 well">
 		<div id="graph-button" class="btn btn-small btn-info">
 			<i class="icon-info-sign icon-white"></i>
 			Graph
 		</div>
-	</div>
-	<div id="endorsements" class="span4">
-		<h2>Endorsements</h2>
-		<table class="table table-bordered table-striped table-condensed">
-			{% for endorsement in endorsements %}
-			<tr class="endorser-row" data-content="{{ endorsement.endorse_this }}">
-				<td class="name"><a href="../{{endorsement.endorse_this.pk}}">{{endorsement.endorse_this.username}}</a></td>
-				<td class="score">{% render_score endorsement %}</td>
-			</tr>
-			{% endfor %}
-		</table>
+	</div>	
+</div>
+<div class="row">
+	<div id="loans" class="span3 well">
+		{% render_loans loans %}
 	</div>
 </div>
 
 <script>
-var pk = {{object.pk}};
+var pk = {{agent.pk}};
 </script>
 <script src="{% get_static_prefix %}js/agent.js" type="text/javascript" charset="utf-8"></script>
 

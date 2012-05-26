@@ -60,4 +60,7 @@ class AgentModel(BorrowerModel, FunderModel):
         loan.funders = self
         loan.save()
 
+        
+    def loans(self):
+        return self.loan_borrower.all()
     

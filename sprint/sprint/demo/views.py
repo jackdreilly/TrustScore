@@ -1,6 +1,7 @@
 # Create your views here.
 
 from trust.models import TrustedAgent
+from loans.models import LoanModel
 from django.views.generic.detail import DetailView
 
 class AgentView(DetailView):
@@ -11,5 +12,15 @@ class AgentView(DetailView):
         data = super(AgentView, self).get_context_data(**kwargs)
         agent = data['object'];
         data['endorsements'] = agent.endorsements()
-        print data
+        data['loans'] = agent.loans()
+        data['agent'] = agent
+        del data['object']
         return data
+        
+
+class LoanView(DetailView):
+    template_name = 'loan.html'
+    model = LoanModel
+    
+    def get_context_data(self, **kwargs):
+        loan = super(LoanView, self).get_context_data(**kwargs)

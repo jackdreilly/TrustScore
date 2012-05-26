@@ -1,0 +1,11 @@
+{% load rating %}
+<h2>Loans</h2>
+<table class="table table-bordered table-striped table-condensed">
+	<tr>
+		<th>Loan ID</th>
+		<th>Amount</th>
+	{% for loan in loans %}
+		{% render_loan loan %}
+	{% endfor %}
+</table>
+

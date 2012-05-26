@@ -1,0 +1,8 @@
+{% load rating %}
+<h2>Endorsements</h2>
+<table class="table table-bordered table-striped table-condensed">
+	{% for endorsement in endorsements %}
+		{% render_endorsement endorsement %}
+	{% endfor %}
+</table>
+
