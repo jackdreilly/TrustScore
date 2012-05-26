@@ -1,6 +1,9 @@
 Django==1.4
 URLObject==2.0.1
 decorator==3.3.3
+-e git+https://github.com/dyve/django-bootstrap-toolkit.git@669bae64e748dee031a4db081518fecfbf5a1ed1#egg=django_bootstrap_toolkit-dev
+django-dajax==0.8.4
+django-dajaxice==0.2
 django-tastypie==0.9.11
 djangorestframework==0.3.3
 httplib2==0.7.4
