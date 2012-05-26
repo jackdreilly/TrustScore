@@ -1,0 +1,29 @@
+.score {
+	width: 30px;
+	height: 30px;
+}
+
+table .name {
+
+}
+
+table .score {
+	width: 40px;
+}
+
+#endorsements {
+	float:right;
+}
+
+#name {
+	float: left;
+}
+
+.chart div {
+	font: 10px sans-serif;
+	background-color: steelblue;
+	text-align: right;
+	padding: 3px;
+	margin: 1px;
+	color: white;
+}

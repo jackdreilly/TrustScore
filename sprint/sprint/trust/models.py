@@ -9,4 +9,3 @@ class TrustedAgent(AgentModel):
     
     def __init__(self, *args, **kwargs):
         super(TrustedAgent, self).__init__(*args, **kwargs)
-        
