@@ -27,6 +27,11 @@ def render_endorsement(endorsement):
 @register.inclusion_tag('agent_info.html')
 def render_agent_info(agent):
     return dict(agent=agent)
+
+@register.inclusion_tag('loan_info.html')
+def render_loan_info(loan):
+    return dict(loan=loan)
+
     
 @register.inclusion_tag('loans.html')
 def render_loans(loans):

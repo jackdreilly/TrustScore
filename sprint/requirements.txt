@@ -13,6 +13,7 @@ mimeparse==0.1.3
 -e git+https://github.com/scholrly/neo4django@03b247d7911753a7e7bf5771a72a41137919f85e#egg=neo4django-dev
 neo4jrestclient==1.6.2
 networkx==1.6
+psycopg2==2.4.5
 python-dateutil==2.1
 six==1.1.0
 wsgiref==0.1.2

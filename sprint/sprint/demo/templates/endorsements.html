@@ -6,3 +6,23 @@
 	{% endfor %}
 </table>
 
+<script>
+$(".endorser-row .name").popover({
+	'placement': 'left',
+});
+
+$(".endorser-row .score").tooltip({
+	title: function() {
+		var classList = this.classList;
+		if (classList.contains("up")) {
+			return "Indicates a positive endorsement";
+		}
+		if (classList.contains("down")) {
+			return "Indicates a negative endorsement";
+		}
+		if (classList.contains("neutral")) {
+			return "Indicates a neutral endorsement";
+		}
+	}
+});
+</script>

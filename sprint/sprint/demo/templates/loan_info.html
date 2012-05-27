@@ -1,0 +1,10 @@
+{% load rating %}
+<h1>Loan</h1>
+<dl>
+  <dt>ID</dt>
+  <dd>{{loan.pk}}</dd>
+  <dt>Borrower</dt>
+  <dd>{% render_agent_info loan.borrower.agentmodel.trustedagent %}</dd>
+  <dt>Amount</dt>
+  <dd>${{loan.amount}}</dd>
+</dl>

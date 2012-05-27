@@ -111,23 +111,3 @@ var trustScoreCBGenerator = Dajaxice.demo.endorser_trust_scores;
 $("#graph-button").click( function (e) {
 	Dajaxice.demo.endorser_trust_scores(endorserTSCallback, {'pk': pk});
 });
-
-
-$(".endorser-row .name").popover({
-	'placement': 'left',
-});
-
-$(".endorser-row .score").tooltip({
-	title: function() {
-		var classList = this.classList;
-		if (classList.contains("up")) {
-			return "Indicates a positive endorsement";
-		}
-		if (classList.contains("down")) {
-			return "Indicates a negative endorsement";
-		}
-		if (classList.contains("neutral")) {
-			return "Indicates a neutral endorsement";
-		}
-	}
-});

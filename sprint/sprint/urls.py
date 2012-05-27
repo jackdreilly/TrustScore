@@ -8,6 +8,9 @@ admin.autodiscover()
 from dajaxice.core import dajaxice_autodiscover
 dajaxice_autodiscover()
 
+from django.views.generic.simple import redirect_to
+
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'sprint.views.home', name='home'),
@@ -21,4 +24,5 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+    (r'^$', redirect_to, {'url': '/demo/'}),
 )
