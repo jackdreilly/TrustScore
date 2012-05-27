@@ -1,6 +1,7 @@
 from sprint.endorsenet.models import *
 from sprint.trust.models import *
 from sprint.loans.models import *
+from sprint.trust.trust_loaner import loaner
 import random
 
 n_names = 100
@@ -54,3 +55,11 @@ for _ in range(500):
     loan = random.choice(loans)
     agent = random.choice(agents)
     agent.endorsement(loan, score = random.randint(-1,1)).save()
+
+    
+for loan in loans:
+    borrower = loan.borrower
+    loaner.decide_on_loan(loan)
+    loan.is_active = False
+    loan.save()
+    loaner.update_trust_scores(loan)
