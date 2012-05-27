@@ -1,5 +1,6 @@
 from loans.models import FunderModel
 from endorsenet.models import get_network
+import math
 
 class Singleton(object):
     _instance = None
@@ -20,9 +21,9 @@ class Loaner(Singleton):
     bad_start = .5
     add_bad_start = True
     min_score = .1
-    end_score_factor = 1.0
+    end_score_factor = 100.0
     cs_score_factor = 1.0
-    fund_threshold = 3.0
+    fund_threshold = 700.0
     n_funds = 0
     n_tries = 0
     net = get_network()
@@ -45,28 +46,32 @@ class Loaner(Singleton):
     def update_loaner_score(self, loanee, score):
         loanee.trust_score = max(score, Loaner.min_score)
         loanee.save()
+        
+    def loan_stats(self, loan):
+        loanee = loan.borrower
+        endorsers = loan.endorsers() # both loan and loanee endorsers, TODO: this gives bad endorsements too, need to fix that
+        print endorsers
+        try:
+            endr_scores = [endorser.borrowermodel.agentmodel.trustedagent.trust_score for endorser in endorsers]
+            print endr_scores
+            n_endorsers_scale = math.log(len(endorsers)/2.0 + 2.71828)
+            print n_endorsers_scale
+            end_score = sum(endr_scores)/float(len(endr_scores))*n_endorsers_scale
+            print end_score
+        except:
+            endr_scores = None
+            end_score = 0.0
+        cs_score = loanee.credit_score_field*Loaner.cs_score_factor
+        end_score*=Loaner.end_score_factor
+        loanee_score = end_score + loanee.credit_score_field
+        return cs_score, endr_scores, end_score, loanee_score
 
     def decide_on_loan(self, loan):
-        print 'loan', loan
-        loanee = loan.borrower
-        print 'loanee', loanee
-        endorsers = loan.endorsers() # both loan and loanee endorsers
-        print 'endorsers', endorsers 
-        try:
-            avg_endorser_rating = sum(endorser.borrowermodel.agentmodel.trustedagent.trust_score for endorser in endorsers)/float(len(endorsers))
-            print 'avg end: ', avg_endorser_rating
-            n_endorsers_scale = math.log(len(endorsers)/3.0 + 2.71828)
-            end_score = avg_endorser_rating*n_endorsers_scale
-        except:
-            end_score = 1.0
-        print 'end score: ', end_score
-        loanee_score = end_score*Loaner.end_score_factor + Loaner.cs_score_factor*loanee.credit_score_field
-        print 'loanee score: ', loanee_score
-        if loanee_score > Loaner.fund_threshold:
-            print 'will fund'
+        cs, end_scores, end_score, total_score = self.loan_stats(loan)
+        if total_score > Loaner.fund_threshold:
             self.fund_loan(loan)
         else:
-            print 'will not fund'
+            pass
         
     def fund_loan(self,loan):
         """docstring for fund_loan"""

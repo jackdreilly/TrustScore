@@ -4,16 +4,17 @@ from trust.models import TrustedAgent
 
 @dajaxice_register
 def endorser_trust_scores(request, pk):
-    print 'got here'
     agent = TrustedAgent.objects.get(pk=pk)
-    print 'agent', agent
-    endorsers = [endr.borrowermodel.agentmodel.trustedagent for endr in agent.endorsers()]
+    endorsements = agent.endorsements()
+    print dir(endorsements[0])
     return simplejson.dumps({
         'endorsers': [
             {
-                'name': endr.first_name,
-                'trust_score': endr.trust_score
-            } for endr in endorsers
+                'name': end.endorse_this.first_name,
+                'trust_score': end.endorse_this.borrowermodel.agentmodel.trustedagent.trust_score,
+                'score': end.score
+            } for end in endorsements
         ]
     }
     )
+    

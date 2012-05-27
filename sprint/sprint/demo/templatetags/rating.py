@@ -7,11 +7,14 @@ def render_score(endorsement):
     score = endorsement.score
     if score > 0:
         img_name = 'up.png'
+        klass = 'up'
     elif score < 0:
         img_name = 'down.png'
+        klass = 'down'
     else:
         img_name = 'neutral.png'
-    return dict(img_name=img_name)
+        klass = 'neutral'
+    return dict(img_name=img_name, klass=klass)
     
 @register.inclusion_tag('endorsements.html')
 def render_endorsements(endorsements):

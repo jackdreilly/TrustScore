@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load rating %}
+{% load static %}
+
+{% block content %}
+
+<div class="row">
+	<div id="loan-name" class="span5 well">
+		Loan {{loan.pk}}
+	</div>
+	<div id="evaluate" class="span5 well">
+		<div id="evaluate-button" class="btn btn-small btn-info">
+			<i class="icon-info-sign icon-white"></i>
+			Evaluate Loan
+		</div>		
+	</div>
+</div>
+
+<script>
+var pk = {{loan.pk}};
+</script>
+<script src="{% get_static_prefix %}js/loan.js" type="text/javascript" charset="utf-8"></script>
+{% endblock content %}

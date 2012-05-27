@@ -19,8 +19,10 @@ class AgentView(DetailView):
         
 
 class LoanView(DetailView):
-    template_name = 'loan.html'
+    template_name = 'loan_view.html'
     model = LoanModel
-    
+
     def get_context_data(self, **kwargs):
-        loan = super(LoanView, self).get_context_data(**kwargs)
+        data = super(LoanView, self).get_context_data(**kwargs)
+        data['loan'] = data['object']
+        return data

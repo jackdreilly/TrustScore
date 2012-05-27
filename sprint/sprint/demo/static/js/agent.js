@@ -8,13 +8,15 @@ function endorserTSCallback(data) {
 		return endorser.trust_score;
 	});
 	
+
+	
 	var height = 140;
 	var width = 300;
 	
 	var x = d3
 		.scale
 		.pow()
-		.domain([0, d3.max(scores)])
+		.domain([d3.max([0,d3.min(scores) - d3.min(scores)*.05 ]), d3.max(scores)])
 		.range([0,width]);
 		
 	var y = d3
@@ -49,10 +51,16 @@ function endorserTSCallback(data) {
 		.enter()
 		.append('rect')
 		.attr('y', function(d) {return 4 +  y(d.name);})
-		.attr('width', function(d,i) {
-			return x(d.trust_score);
-		})
-		.attr('height', y.rangeBand());
+		.attr('width', 0)
+		.attr('height', y.rangeBand())
+		.attr("data-content", function(d){return sprintf("%s: %.2f", d.name, d.trust_score);})
+		.attr('style', function(d) {
+			var color = "steelblue";
+			if (d.score < 0) color = "darkred";
+			if (d.score > 0.0) color = "darkgreen";
+			if (d.score == 0.0) color = "gray";
+			return "fill:" + color + ";";
+		});
 						
 	chart
 		.selectAll("text")
@@ -66,7 +74,7 @@ function endorserTSCallback(data) {
 		.attr("dx", -10) // padding-right
 		.attr("dy", ".35em") // vertical-align: middle
 		.attr("text-anchor", "end") // text-align: right
-		.text(function(d){return d.name;});				
+		.text(function(d){return sprintf("%s: %.2f", d.name, d.trust_score);});
 
 	chart
 		.selectAll(".rule")
@@ -86,18 +94,40 @@ function endorserTSCallback(data) {
 		.attr('y2', 120)
 		.style('stroke', '#000');
 		
+	$("#graph rect").popover({
+		placement: "left"
+	});
+	
+	chart
+		.selectAll("rect")
+		.data(endorsers)
+		.transition()
+		.duration(1000)
+		.attr('width', function(d) {
+			return x(d.trust_score);
+		});
 }
 var trustScoreCBGenerator = Dajaxice.demo.endorser_trust_scores;
 $("#graph-button").click( function (e) {
 	Dajaxice.demo.endorser_trust_scores(endorserTSCallback, {'pk': pk});
 });
 
-function popoverContent(el, ef) {
-	console.log(el);
-	console.log(ef);
-}
 
-$(".endorser-row").popover({
-	'content': popoverContent,
+$(".endorser-row .name").popover({
 	'placement': 'left',
+});
+
+$(".endorser-row .score").tooltip({
+	title: function() {
+		var classList = this.classList;
+		if (classList.contains("up")) {
+			return "Indicates a positive endorsement";
+		}
+		if (classList.contains("down")) {
+			return "Indicates a negative endorsement";
+		}
+		if (classList.contains("neutral")) {
+			return "Indicates a neutral endorsement";
+		}
+	}
 });

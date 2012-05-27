@@ -18,6 +18,6 @@ table .score {
 }
 
 .chart rect {
-	stroke: white;
+	stroke: darkgray;
 	fill: steelblue;
 }
