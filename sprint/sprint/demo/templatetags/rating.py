@@ -33,6 +33,12 @@ def render_loans(loans):
 def render_loan(loan):
     return dict(loan=loan)
     
+@register.inclusion_tag('endorser_popover.html')
+def render_endorser_popover(endorser):
+    return dict(endorser=endorser)
+    
+
+    
 
     
 

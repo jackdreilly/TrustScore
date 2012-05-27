@@ -1,5 +1,5 @@
 {% load rating %}
-<tr class="endorser-row" data-content="{{ endorsement.endorse_this }}">
+<tr class="endorser-row" data-content='{% render_endorser_popover endorsement.endorse_this %}'>
 	<td class="name"><a href="../{{endorsement.endorse_this.pk}}">{{endorsement.endorse_this.username}}</a></td>
 	<td class="score">{% render_score endorsement %}</td>
 </tr>
