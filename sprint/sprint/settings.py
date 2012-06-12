@@ -170,26 +170,3 @@ LOGGING = {
         },
     }
 }
-
-NEO4J_DATABASES = {
-    'default' : {
-        'HOST':'localhost',
-        'PORT':7474,
-        'ENDPOINT':'/db/data'
-    }
-}
-
-from constants import N4J_ENDPOINT, N4J_CLEANDB_URI
-
-NEO4J_TEST_DATABASES = {
-    'default': {
-        'HOST': 'localhost',
-        'PORT': 7474,
-        'ENDPOINT': N4J_ENDPOINT,
-        'OPTIONS': {
-            'CLEANDB_URI': N4J_CLEANDB_URI,
-        }
-    }
-}
-
-DATABASE_ROUTERS = ['neo4django.utils.Neo4djangoIntegrationRouter']
