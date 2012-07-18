@@ -1,3 +1,9 @@
+body {padding:80px 0;}
+
+.navbar .brand {color:#ccc; font-weight:100; letter-spacing:0.1em; font-size:36px; line-height:40px;}
+.navbar a.brand img {width:320px;}
+.navbar span.brand {position:relative; top:0.25em; padding-left:40px;}
+
 .score {
 	width: 30px;
 	height: 30px;
