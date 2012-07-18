@@ -134,10 +134,8 @@ INSTALLED_APPS = (
     'bootstrap_toolkit',
     'dajax',
     'dajaxice',
-    'loans',
     'endorsenet',
     'demo',
-    'trust',
 )
 
 DAJAXICE_MEDIA_PREFIX="dajaxice"
