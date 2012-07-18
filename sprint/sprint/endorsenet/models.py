@@ -1,16 +1,13 @@
 from django.db import models
-from interfaces.iEndorsement import Endorser, ScoreEndorsement
-from interfaces.iNetwork import Network as iNetwork
 from django.contrib.auth.models import User
 
 
 # Create your models here.
 
-class EndorsableNode(models.Model):
+class Subject(models.Model):
 
     def __repr__(self):
         return str(self.id)
-
 
     def __unicode__(self):
         return self.__repr__()
@@ -19,49 +16,29 @@ class EndorsableNode(models.Model):
         return self.__repr__()
 
     def endorsers(self):
-        return [end.endorse_this for end in self.endorse_that.all()]
+        return [endorsement.endorser for endorsement in self.received_endorsements()]
         
-    def endorsements(self):
-        return self.endorse_that.all()
+    def received_endorsements(self):
+        return self.received_endorsement.all()
 
-
-
-class EndorseNode(User, EndorsableNode, Endorser):
-    # here I have assumed that any endorser must have a full account
-    def __init__(self, *args, **kwargs):
-        super(EndorseNode, self).__init__(*args, **kwargs)
-
-    def endorsement(self, endorsable, score=0):
-        return EndorseEdge(endorser=self, endorsee=endorsable, score=score)
+class Person(Subject):
+    def give_endorsement(self, subject, score=0):
+        return Endorsement(endorser=self, subject=subject, score=score)
+    
+    def endorsees():
+        return [endorsement.subject for endorsement in self.given_endorsements()]
+        
+    def given_endorsements(self):
+        return self.given_endorsement.all()
 
     
-class EndorseEdge(models.Model, ScoreEndorsement):
-    # I do not use this yet, but something should inherit the Endorsement interface
-    endorse_this = models.ForeignKey(EndorseNode, related_name='endorse_this')
-    endorse_that = models.ForeignKey(EndorsableNode, related_name='endorse_that')
+class Endorsement(models.Model):
+    endorser = models.ForeignKey(Person, related_name='given_endorsement')
+    subject = models.ForeignKey(Subject, related_name='received_endorsement')
     score = models.FloatField()
     
-    def __init__(self,*args,**kwargs):
-    	if len(kwargs) is 0:
-    		models.Model.__init__(self, *args,**kwargs)
-    		return
-    	endorser = kwargs.pop('endorser')
-    	endorsee = kwargs.pop('endorsee')
-    	score = kwargs['score']
-    	
-    	ScoreEndorsement.__init__(self, score=score, endorsee=endorsee, endorser=endorser)
-    	
-    	kwargs['endorse_this'] = endorser
-    	kwargs['endorse_that'] = endorsee
-    	
-    	print kwargs
-        print args
-    	
-    	models.Model.__init__(self, *args,**kwargs)
-
     def __repr__(self):
-        return 'endr: {0}, endee: {1}'.format(self.endorse_this, self.endorse_that)
-
+        return '{0} -> {1}'.format(self.endorser, self.subject)
 
     def __unicode__(self):
         return self.__repr__()
@@ -70,46 +47,41 @@ class EndorseEdge(models.Model, ScoreEndorsement):
         return self.__repr__()
 
 
+class Singleton(object):
+    _instance = None
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = object.__new__(cls, *args, **kwargs)
+        return cls._instance
+
+    @classmethod
+    def get(cls):
+        return cls()
+        
     
-class EndorserNetwork(iNetwork):
+class EndorseNet(Singleton):
     # this will be the singleton that the algorithm utilizes
     """ note that endorsers may endorse non endorsers (eg loans), this should be accounted for """
     
-    def neighbors(self, node):
-    	return [endorsement.endorse_that.endorsenode 
-            for endorsement in node.endorse_this.all() 
-            if hasattr(endorsement.endorse_that, 'endorsenode')]
+    def subjects(self):
+    	return Subject.objects.all()
 
-    def nodes(self):
-    	return EndorseNode.objects.all()
-
-    def bfs_iterator(self, node, max_depth = 5):
+    def endorsers_to_depth(self, subject, max_depth = 5):
         depth = 0
-        heap = set([node])
-        depths = [[node]]
+        heap = set([subject])
+        depths = [[subject]]
         while depth < max_depth:
             depth += 1
             cur = depths[-1]
             next = set()
             depths.append(next)
-            print 'checking cur'
             for guy in cur:
-                print 'checking guy', guy
                 endorsers = guy.endorsers()
-                print 'guy endorsers', endorsers
                 next.update(set(endorsers).difference(heap))
-                print 'next', next
                 heap.update(endorsers)
-                print 'heap', heap
-        return [(guy, ind) for ind, pack in enumerate(depths) for guy in pack]
-
-
-
-
-
-
+        return [(guy, ind) for ind, pack in enumerate(depths) for guy in pack][1:]
 
 
 def get_network():
-	return EndorserNetwork.get()
+	return EndorserNet.get()
 

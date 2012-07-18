@@ -14,3 +14,9 @@ class SimpleTest(TestCase):
         Tests that 1 + 1 always equals 2.
         """
         self.assertEqual(1 + 1, 2)
+        
+    def test_create_subject(self):
+        """
+        Tests something
+        """
+        self.assertEqual(1,1)

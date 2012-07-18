@@ -1,6 +1,7 @@
 from django.contrib import admin
-from models import EndorseNode, EndorseEdge
+from models import Subject, Person, Endorsement
 
-admin.site.register(EndorseNode)
-admin.site.register(EndorseEdge)
+admin.site.register(Subject)
+admin.site.register(Person)
+admin.site.register(Endorsement)
 
