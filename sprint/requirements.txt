@@ -2,10 +2,5 @@ Django==1.4
 -e git+https://github.com/dyve/django-bootstrap-toolkit.git@669bae64e748dee031a4db081518fecfbf5a1ed1#egg=django_bootstrap_toolkit-dev
 django-dajax==0.8.4
 django-dajaxice==0.2
-<<<<<<< Updated upstream
 djangorestframework==0.3.3
-=======
-django-tastypie==0.9.11
--e git+https://github.com/scholrly/neo4django@03b247d7911753a7e7bf5771a72a41137919f85e#egg=neo4django-dev
->>>>>>> Stashed changes
 networkx==1.6
