@@ -9,6 +9,9 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+HAYSTACK_SITECONF = 'myproject.search_sites'
+HAYSTACK_SEARCH_ENGINE = 'simple'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -130,10 +133,10 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
-    'tastypie',
     'bootstrap_toolkit',
     'dajax',
     'dajaxice',
+	'haystack',
     'loans',
     'endorsenet',
     'demo',
