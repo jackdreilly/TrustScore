@@ -1,27 +1,17 @@
 body {padding:80px 0;}
 
-.navbar .brand {color:#ccc; font-weight:100; letter-spacing:0.1em; font-size:36px; line-height:40px;}
-.navbar a.brand img {width:320px;}
-.navbar span.brand {position:relative; top:0.25em; padding-left:40px;}
+/*.navbar {color:#ccc; letter-spacing:0.1em; font-size:16px; line-height:40px;}
+.navbar .nav > li > a {line-height:40px;}
+*/
 
-.score {
-	width: 30px;
-	height: 30px;
-}
+h1 {margin-bottom:18px;}
 
-table .name {
+.navbar .brand img {float:left; height:23px;}
 
-}
+.table caption {background:#f2f2f2; font-weight:bold; padding:8px;}
+.table-bordered caption {border:1px solid #ddd; border-bottom:0; border-radius:3px 3px 0 0;}
+.table-bordered.table-caption {border-top-left-radius:0; border-top-right-radius:0;}
 
-table .score {
-	width: 40px;
-}
-
-#endorsements {
-}
-
-#name {
-}
 
 .chart rect {
 	stroke: darkgray;
