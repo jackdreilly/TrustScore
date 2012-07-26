@@ -10,7 +10,6 @@ dajaxice_autodiscover()
 
 from django.views.generic.simple import redirect_to
 
-
 urlpatterns = patterns('',
     (r'^%s/' % settings.DAJAXICE_MEDIA_PREFIX, include('dajaxice.urls')),
 
@@ -20,4 +19,8 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     (r'^$', redirect_to, {'url': '/demo/'}),
+
+    url(r'^api/', include("endorsenet.urls")),
+    
+
 )
