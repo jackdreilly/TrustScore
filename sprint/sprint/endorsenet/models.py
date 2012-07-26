@@ -55,7 +55,7 @@ class Context(models.Model, AutoPrint):
 class Subject(models.Model, AutoPrint):
     creator = models.ForeignKey(User)
     context = models.ForeignKey(Context)
-    external_id models.CharField(max_length=100)
+    external_id = models.CharField(max_length=100)
 
     def endorsers(self):
         return [endorsement.endorser for endorsement in self.received_endorsements()]
