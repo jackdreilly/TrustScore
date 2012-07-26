@@ -1,7 +1,7 @@
 body {margin:80px 0;}
 
 .navbar .brand {color:#fff; font-weight:light; font-size:28px; letter-spacing:0.05em;}
-.navbar .brand img {float:left; height:28px;}
+.navbar img.brand {float:left; height:28px;}
 .navbar h1.brand {margin-left:0;}
 .navbar .nav-collapse form {margin:8px 0 0;}
 .navbar .nav-collapse form input {margin-bottom:0;}
