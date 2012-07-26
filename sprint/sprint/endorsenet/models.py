@@ -13,59 +13,25 @@ class AutoPrint(object):
     def __unicode__(self):
         return self.to_string()
 
-
-class Owner(User, AutoPrint):
-    
-    def new_context(self, space, action_name, person_name):
-        context = Context(
-            space=space, 
-            owner=self, 
-            action_name=action_name,
-            person_name=person_name
-        )
-        context.save()
-        return context
-        
-    def space(self):
-        try:
-            space = self.space_set.all()[0]
-        except Exception as e:
-            print e
-            space = self.create_space()
-        finally:
-            return space
-            
-    def create_space(self):
-        space = Space(owner=self)
-        space.save()
-        return space
-            
-        
-    def private_context(self, action_name, person_name):
-        return self.new_context(self.space(), action_name, person_name)
-        
-    def to_string(self):
-        return str(self.pk)
+# created_x = new model, not saved
+# saved_x = new model, saved
         
 
 class Space(models.Model, AutoPrint):
-    owner = models.ForeignKey(Owner, related_name='space_owner')
-    members = models.ManyToManyField(Owner)
+    creator = models.ForeignKey(User, related_name='space_creator')
+    members = models.ManyToManyField(User)
     
     def to_string(self):
-        return 'owner: {0}'.format(self.owner)
+        return 'creator: {0}'.format(self.creator)
   
 class Context(models.Model, AutoPrint):
-    owner = models.ForeignKey(Owner)
+    creator = models.ForeignKey(User)
     space = models.ForeignKey(Space)
     action_name = models.CharField(max_length=100)
-    person_name = models.CharField(max_length=100)
+    actor_name = models.CharField(max_length=100)
 
     def to_string(self):
-        return '{0} doing {1}'.format(self.person_name, self.action_name)
-        
-    def new_action(self, person):
-        return Action(context=self, person=person)
+        return '{0} doing {1}'.format(self.actor_name, self.action_name)
         
     def subjects(self):
     	return self.subject_set.all()
@@ -87,8 +53,9 @@ class Context(models.Model, AutoPrint):
         
 
 class Subject(models.Model, AutoPrint):
-    
+    creator = models.ForeignKey(User)
     context = models.ForeignKey(Context)
+    external_id models.CharField(max_length=100)
 
     def endorsers(self):
         return [endorsement.endorser for endorsement in self.received_endorsements()]
@@ -99,11 +66,11 @@ class Subject(models.Model, AutoPrint):
     def to_string(self):
         return str(self.pk)
 
-class Person(models.Model, AutoPrint):
-    owner = models.ForeignKey(Owner)
+class Actor(Subject, AutoPrint):
+    name = models.CharField(max_length = 100, default = 'Anonymous')
     
     def to_string(self):
-        return '{2} - cxt: {0}, owner: {1}'.format(self.context, self.owner, self.pk)
+        return '{2} - cxt: {0}, creator: {1}'.format(self.context, self.creator, self.name)
   
     def give_endorsement(self, subject, score=0):
         return Endorsement(endorser=self, subject=subject, score=score)
@@ -115,15 +82,27 @@ class Person(models.Model, AutoPrint):
         return self.given_endorsement.all()
     
 class Endorsement(models.Model, AutoPrint):
-    endorser = models.ForeignKey(Person, related_name='given_endorsement')
+    endorser = models.ForeignKey(Actor, related_name='given_endorsement')
     subject = models.ForeignKey(Subject, related_name='received_endorsement')
     score = models.FloatField()
     
     def to_string(self):
         return '{0} -> {1}'.format(self.endorser, self.subject)
-        
+
 class Action(Subject):
-    person = models.ForeignKey(Person)
+    actor = models.ForeignKey(Actor)
+    weight = models.FloatField()
+    status = models.BooleanField()
+
+    def to_string(self):
+        return 'actor: {0}'.format(self.actor)
+
+class CommitEvent(models.Model):
+    action = models.ForeignKey(Action)
     
     def to_string(self):
-        return 'person: {0}'.format(self.person)
+        return str(self.action)
+
+class ActionUpdateEvent(models.Model):
+    action = models.ForeignKey(Action)
+    weight = models.FloatField()

@@ -114,6 +114,7 @@ ROOT_URLCONF = 'sprint.urls'
 WSGI_APPLICATION = 'sprint.wsgi.application'
 
 TEMPLATE_DIRS = (
+    'templates',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -130,8 +131,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
-    'tastypie',
     'bootstrap_toolkit',
+	'haystack',
     'dajax',
     'dajaxice',
     'endorsenet',
@@ -168,3 +169,7 @@ LOGGING = {
         },
     }
 }
+
+
+HAYSTACK_SITECONF = 'sprint.search_sites'
+HAYSTACK_SEARCH_ENGINE = 'simple'
