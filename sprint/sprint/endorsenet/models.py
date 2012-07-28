@@ -26,7 +26,7 @@ class Space(models.Model, AutoPrint):
   
 class Context(models.Model, AutoPrint):
     creator = models.ForeignKey(User)
-    space = models.ForeignKey(Space)
+    space = models.ForeignKey(Space, related_name='contexts')
     action_name = models.CharField(max_length=100)
     actor_name = models.CharField(max_length=100)
 
@@ -54,7 +54,6 @@ class Context(models.Model, AutoPrint):
 
 class Subject(models.Model, AutoPrint):
     creator = models.ForeignKey(User)
-    context = models.ForeignKey(Context)
     external_id = models.CharField(max_length=100)
 
     def endorsers(self):
@@ -68,6 +67,7 @@ class Subject(models.Model, AutoPrint):
 
 class Actor(Subject, AutoPrint):
     name = models.CharField(max_length = 100, default = 'Anonymous')
+    context = models.ForeignKey(Context, related_name='actors')
     
     def to_string(self):
         return '{2} - cxt: {0}, creator: {1}'.format(self.context, self.creator, self.name)
@@ -82,8 +82,8 @@ class Actor(Subject, AutoPrint):
         return self.given_endorsement.all()
     
 class Endorsement(models.Model, AutoPrint):
-    endorser = models.ForeignKey(Actor, related_name='given_endorsement')
-    subject = models.ForeignKey(Subject, related_name='received_endorsement')
+    endorser = models.ForeignKey(Actor, related_name='given_endorsements')
+    subject = models.ForeignKey(Subject, related_name='received_endorsements')
     score = models.FloatField()
     
     def to_string(self):
@@ -93,6 +93,7 @@ class Action(Subject):
     actor = models.ForeignKey(Actor)
     weight = models.FloatField()
     status = models.BooleanField()
+    context = models.ForeignKey(Context, related_name='actions')
 
     def to_string(self):
         return 'actor: {0}'.format(self.actor)

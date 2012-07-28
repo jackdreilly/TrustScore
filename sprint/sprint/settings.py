@@ -136,7 +136,7 @@ INSTALLED_APPS = (
     'dajaxice',
     'endorsenet',
     'demo',
-    'djangorestframework',
+    'tastypie',
 )
 
 DAJAXICE_MEDIA_PREFIX="dajaxice"
