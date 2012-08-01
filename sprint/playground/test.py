@@ -43,11 +43,12 @@ def never_pay_last(last_pay_time=5.0):
     payment.new_event(Event.missed(1.0))
     
     payment.new_event(Event.paid(last_pay_time, 10.0))
+    # TODO: close entire load when amount paid = total amount
     return loan
     
 def compare_npl(times=None):
     if times is None:
-        times = lab.linspace(0.0, 10, 5)
+        times = lab.linspace(0.0, 30, 5)
     lab.figure()
     lab.hold(True)
     for time in times:
@@ -89,7 +90,22 @@ def late_every_month(dt = 3.0, t = 4.0):
         for i in range(3):
             payment.new_event(Event.missed(float(dt)/3.0))
         payment.new_event(Event.paid(t, 10.0))
-    lab.plot(loan.trust_profile(), label='late')
+    lab.plot(loan.trust_profile(), label='late split in 3')
+    
+    # separator
+    
+    loan = Loan(100.0)
+    
+    for i in range(10):
+        payment = loan.new_payment(10.0)
+        payment.new_event(Event.missed(dt))
+        payment.new_event(Event.paid(t, 10.0))
+    lab.plot(loan.trust_profile(), label='late not split')
+    
+    # separator
+    
+    
+    
     loan = Loan(100.0)
     
     for i in range(10):
@@ -100,8 +116,46 @@ def late_every_month(dt = 3.0, t = 4.0):
     lab.legend()
     lab.show()
     
+def late_guy():
+    
+    
+    lab.figure()
+    lab.hold(True)
+    
+    loan = Loan(50.0)
+    
+    for i in range(10):
+        payment = loan.new_payment(5.0)
+        for j in range(100):
+            payment.new_event(Event.paid(float(j),5.0 / 100 ))
+    lab.plot(loan.trust_profile(), label='late')
+    
+    loan = Loan(50.0)
+    
+    for i in range(10):
+        payment = loan.new_payment(5.0)
+        for j in range(100):
+            payment.new_event(Event.paid(float(j),5.0 / 100 ))
+            payment.new_event(Event.missed(1.0))
+    lab.plot(loan.trust_profile(), label='late with missed')
+    
+    loan = Loan(50.0)
+    
+    for i in range(10):
+        payment = loan.new_payment(5.0)
+        payment.new_event(Event.paid(0,5.0))
+    lab.plot(loan.trust_profile(), label='on time')    
+
+
+
+    lab.legend()
+    lab.show()
+    
+    
+    
+    
 # late_every_month()
 # bum_compare()
 # compare_npl()    
-good_then_default()
-    
+# good_then_default()
+late_guy()

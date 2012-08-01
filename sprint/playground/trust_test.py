@@ -37,6 +37,7 @@ class Loan(object):
         return -1.0 * self.FLOOR_SCALE * self.amount
         
     def floor_fn(self, amount):
+        # the proportion of the entire penalty pool to assign to the current loan
         return (math.exp(amount / self.amount) - 1) / (math.exp(1.0) - 1)
         
     def payment_floor_factor(self, amount):
@@ -118,7 +119,7 @@ class Payment(object):
         factor = self.missed_factor(start, stop)
         penalty = factor * self.missed_pool
         return penalty
-        
+
          
     def missed_factor(self, start, stop):
         return math.exp(-start/self.MISSED_DECAY_RATE) - math.exp(-stop/self.MISSED_DECAY_RATE)
