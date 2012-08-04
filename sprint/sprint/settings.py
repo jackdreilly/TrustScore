@@ -138,6 +138,7 @@ INSTALLED_APPS = (
     'trust',
     'loan',
     'tastypie',
+    'frontend',
 )
 
 DAJAXICE_MEDIA_PREFIX="dajaxice"

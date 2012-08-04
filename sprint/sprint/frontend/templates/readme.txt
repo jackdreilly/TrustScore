@@ -1,0 +1,1 @@
+I'm building this offshoot HTML because I can't view the python pages. All files in here are siloed within "nate" but eventually need to be re-integrated. The Bootstrap stuff enables me to develop with Bootstrap, but it should be deleted and my HTML should plug back into the original bootstrap stuff that's loaded in.
