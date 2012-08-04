@@ -91,7 +91,7 @@ class Loan(t_models.TrustAction):
         )
     
 class Payment(models.Model):
-    loan = models.ForeignKey(Loan)
+    loan = models.ForeignKey(Loan, related_name="payments")
     amount = models.FloatField()
     floor = models.FloatField()
     ceiling = models.FloatField()
