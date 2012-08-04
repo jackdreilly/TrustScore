@@ -95,7 +95,8 @@ class Payment(models.Model):
     amount = models.FloatField()
     floor = models.FloatField()
     ceiling = models.FloatField()
-    
+    due_date = models.DateTimeField()
+
     DEFAULT_WEIGHT = 2.0
     PAID_DECAY_RATE = 10.0
     MISSED_DECAY_RATE = 2.0
@@ -104,7 +105,7 @@ class Payment(models.Model):
         return len(self.default_events()) > 0
     
     def last_missed_date(self):
-        missed_events = self.missed_event_set.order('-date')
+        missed_events = self.payment_missed_event_set.order('-date')
         if len(missed_events) is 1:
             return self.date
         return missed_events[1].date        
