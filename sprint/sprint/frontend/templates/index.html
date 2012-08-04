@@ -1,16 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-<ul>
-	{% for loan in loans %}
-	<li>
-		<div>
-			<h1>
-				{{loan.actor.name}}
-			</h1>
-			<p>{{loan.amount}}</p>
-		</div>
-	</li>
-	{% endfor %}
-</ul>
+{% include "action-items.html" %}
+{% include "loans.html" %}
+{% include "agents.html" %}
+{% include "search-results.html" %}
 {% endblock content %}

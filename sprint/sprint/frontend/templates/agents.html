@@ -1,16 +1,3 @@
-<?php
-
-$agentactions = '
-<div class="btn-group">
-	<button class="btn dropdown-toggle" data-toggle="dropdown"> Actions&hellip; <span class="caret"></span></button>
-	<ul class="dropdown-menu">
-		<li><a href="#">Add Recommendation</a></li>
-		<li><a href="#">Add Loan Request</a></li>
-	</ul>
-</div>';
-
-?>
-
 <section class="tab-pane" id="tab2">
 	<div class="alert alert-info">
 		<h4>Developer Note:</h4>
@@ -45,7 +32,7 @@ $agentactions = '
 					<td>000</td>
 					<td>2</td>
 					<td>
-						<?php echo $agentactions; ?>
+						{% include "agent-actions.html" %}
 					</td>
 				</tr>
 				<tr>
@@ -75,7 +62,7 @@ $agentactions = '
 					<td>000</td>
 					<td>20</td>
 					<td>
-						<?php echo $agentactions; ?>
+						{% include "agent-actions.html" %}
 					</td>
 				</tr>
 				<tr>
@@ -84,7 +71,7 @@ $agentactions = '
 					<td>000</td>
 					<td>1</td>
 					<td>
-						<?php echo $agentactions; ?>
+						{% include "agent-actions.html" %}
 					</td>
 				</tr>
 			</tbody>

@@ -1,0 +1,33 @@
+<div id="quick-add" class="sidebar well">
+	<h3>Quick Add</h3>
+	<p id="add-agent">
+		<a href="#add-agent-modal" class="btn" data-toggle="modal"><i class="icon-user"></i> Add Agent</a>
+		<div class="modal hide fade" id="add-agent-modal">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h3>Add Agent</h3>
+			</div>
+			{% include "add-borrower-form.html" %}
+		</div>
+	</p>
+	<p id="add-endorsement">
+		<a href="#add-endorsement-modal" class="btn" data-toggle="modal"><i class="icon-bullhorn"></i> Add Endorsement</a>
+		<div class="modal hide fade" id="add-endorsement-modal">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h3>Add Endorsement</h3>
+			</div>
+			{% include "add-endorsement-form.html" %}
+		</div>
+	</p>
+	<p id="add-loanrequest">
+		<a href="#add-loanrequest-modal" class="btn" data-toggle="modal"><i class="icon-briefcase"></i> Add Loan Request</a>
+		<div class="modal hide fade" id="add-loanrequest-modal">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h3>Add Loan Request</h3>
+			</div>
+			{% include "add-loan-form.html" %}
+		</div>
+	</p>
+</div>
