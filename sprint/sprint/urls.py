@@ -10,13 +10,7 @@ dajaxice_autodiscover()
 
 from django.views.generic.simple import redirect_to
 
-
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'sprint.views.home', name='home'),
-    url(r'^loans/', include('loans.urls')),
-    url(r'^demo/', include('demo.urls')),
-    url(r'^trust/', include('trust.urls')),
     (r'^%s/' % settings.DAJAXICE_MEDIA_PREFIX, include('dajaxice.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
@@ -24,5 +18,4 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    (r'^$', redirect_to, {'url': '/demo/'}),
 )

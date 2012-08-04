@@ -1,6 +1,8 @@
 from django.contrib import admin
-from models import EndorseNode, EndorseEdge
-
-admin.site.register(EndorseNode)
-admin.site.register(EndorseEdge)
+from models import Endorsement, Context, Space, Subject, Actor
+[
+admin.site.register(klass)
+for klass in
+[Endorsement, Context, Space]
+]
 
