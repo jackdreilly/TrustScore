@@ -1,6 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-<p>hello</p>
-
+<ul>
+	{% for loan in loans %}
+	<li>
+		<div>
+			<h1>
+				{{loan.actor.name}}
+			</h1>
+			<p>{{loan.amount}}</p>
+		</div>
+	</li>
+	{% endfor %}
+</ul>
 {% endblock content %}
