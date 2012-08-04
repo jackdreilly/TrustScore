@@ -9,9 +9,6 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-HAYSTACK_SITECONF = 'myproject.search_sites'
-HAYSTACK_SEARCH_ENGINE = 'simple'
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -117,6 +114,7 @@ ROOT_URLCONF = 'sprint.urls'
 WSGI_APPLICATION = 'sprint.wsgi.application'
 
 TEMPLATE_DIRS = (
+    'templates',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -136,11 +134,10 @@ INSTALLED_APPS = (
     'bootstrap_toolkit',
     'dajax',
     'dajaxice',
-	'haystack',
-    'loans',
     'endorsenet',
-    'demo',
     'trust',
+    'loan',
+    'tastypie',
 )
 
 DAJAXICE_MEDIA_PREFIX="dajaxice"

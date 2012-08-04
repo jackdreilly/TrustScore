@@ -1,11 +1,14 @@
 from django.db import models
-from loans.models import AgentModel
-from trust_loaner import loaner
-# Create your models here.
+import sprint.endorsenet.models as e_models
 
-class TrustedAgent(AgentModel):
-    """docstring for TrustedAgent"""
-    trust_score = models.FloatField(default=loaner.good_start)
+class TrustActor(e_models.Actor):
+    DEFAULT_SCORE = 1.0
+    trust_score = models.FloatField(default=DEFAULT_SCORE)
+
+class TrustAction(e_models.Subject):
+    actor = models.ForeignKey(TrustActor)
     
-    def __init__(self, *args, **kwargs):
-        super(TrustedAgent, self).__init__(*args, **kwargs)
+class TrustEvent(models.Model):
+    date = models.DateTimeField()
+    action = models.ForeignKey(TrustAction)
+    score = models.FloatField()
