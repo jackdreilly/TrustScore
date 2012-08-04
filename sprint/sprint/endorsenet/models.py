@@ -55,11 +55,11 @@ class Context(models.Model, AutoPrint):
 class Subject(models.Model, AutoPrint):
     creator = models.ForeignKey(User, null = True, blank = True)
     external_id = models.CharField(max_length=100, null = True, blank = True)
-    context = models.ForeignKey(Context, related_name='actors')
+    #context = models.ForeignKey(Context, related_name='actors')
 
-
+    @property
     def endorsers(self):
-        return [endorsement.endorser for endorsement in self.received_endorsements()]
+        return [endorsement.endorser for endorsement in self.received_endorsements.all()]
         
     def received_endorsements(self):
         return self.received_endorsement.all()
@@ -71,11 +71,12 @@ class Actor(Subject, AutoPrint):
     name = models.CharField(max_length = 100, default = 'Anonymous')
     
     def to_string(self):
-        return '{2} - cxt: {0}, creator: {1}'.format(self.context, self.creator, self.name)
+        return '{1} - creator: {0}'.format(self.creator, self.name)
   
     def give_endorsement(self, subject, score=0):
         return Endorsement(endorser=self, subject=subject, score=score)
     
+    @property
     def endorsees():
         return [endorsement.subject for endorsement in self.given_endorsements()]
         

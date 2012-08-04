@@ -1,0 +1,119 @@
+[
+    {
+        "pk": 1,
+        "model": "auth.user",
+        "fields": {
+            "username": "bob",
+            "first_name": "",
+            "last_name": "",
+            "is_active": true,
+            "is_superuser": true,
+            "is_staff": true,
+            "last_login": "2012-07-27T21:34:29.491Z",
+            "groups": [],
+            "user_permissions": [],
+            "password": "pbkdf2_sha256$10000$PsaJIMoOAml8$8+5q8maXrizUhxWe+VUzzKOo4GK0ni5O6Gvf0IaY/Wc=",
+            "email": "stev@kiva.org",
+            "date_joined": "2012-07-26T03:45:33.032Z"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "endorsenet.space",
+        "fields": {
+            "members": [
+                1
+            ],
+            "creator": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "endorsenet.space",
+        "fields": {
+            "members": [
+                1
+            ],
+            "creator": 1
+        }
+    },
+    {
+        "pk": 1,
+        "model": "endorsenet.context",
+        "fields": {
+            "actor_name": "Person",
+            "space": 1,
+            "action_name": "Loan",
+            "creator": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "endorsenet.context",
+        "fields": {
+            "actor_name": "bar",
+            "space": 2,
+            "action_name": "foo",
+            "creator": 1
+        }
+    },
+    {
+        "pk": 1,
+        "model": "endorsenet.subject",
+        "fields": {
+            "external_id": "client-01",
+            "creator": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "endorsenet.subject",
+        "fields": {
+            "external_id": "loan-01",
+            "creator": 1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "endorsenet.subject",
+        "fields": {
+            "external_id": "client-2",
+            "creator": 1
+        }
+    },
+    {
+        "pk": 1,
+        "model": "endorsenet.actor",
+        "fields": {
+            "name": "Bob",
+            "context": 1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "endorsenet.actor",
+        "fields": {
+            "name": "Jane",
+            "context": 1
+        }
+    },
+    {
+        "pk": 1,
+        "model": "endorsenet.endorsement",
+        "fields": {
+            "endorser": 3,
+            "score": 100.0,
+            "subject": 2
+        }
+    },
+    {
+        "pk": 2,
+        "model": "endorsenet.action",
+        "fields": {
+            "status": false,
+            "context": 1,
+            "weight": 1500.0,
+            "actor": 1
+        }
+    }
+]

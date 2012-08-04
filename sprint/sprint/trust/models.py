@@ -6,7 +6,7 @@ class TrustActor(e_models.Actor):
     trust_score = models.FloatField(default=DEFAULT_SCORE)
 
 class TrustAction(e_models.Subject):
-    actor = models.ForeignKey(TrustActor)
+    actor = models.ForeignKey(TrustActor, related_name='actions')
     
 class TrustEvent(models.Model):
     date = models.DateTimeField()
