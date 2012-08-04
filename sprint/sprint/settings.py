@@ -136,7 +136,7 @@ INSTALLED_APPS = (
     'dajaxice',
     'endorsenet',
     'trust',
-    'loans',
+    'loan',
     'tastypie',
 )
 
