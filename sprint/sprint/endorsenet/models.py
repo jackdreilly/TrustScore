@@ -53,8 +53,10 @@ class Context(models.Model, AutoPrint):
         
 
 class Subject(models.Model, AutoPrint):
-    creator = models.ForeignKey(User)
-    external_id = models.CharField(max_length=100)
+    creator = models.ForeignKey(User, null = True, blank = True)
+    external_id = models.CharField(max_length=100, null = True, blank = True)
+    context = models.ForeignKey(Context, related_name='actors')
+
 
     def endorsers(self):
         return [endorsement.endorser for endorsement in self.received_endorsements()]
@@ -67,7 +69,6 @@ class Subject(models.Model, AutoPrint):
 
 class Actor(Subject, AutoPrint):
     name = models.CharField(max_length = 100, default = 'Anonymous')
-    context = models.ForeignKey(Context, related_name='actors')
     
     def to_string(self):
         return '{2} - cxt: {0}, creator: {1}'.format(self.context, self.creator, self.name)
@@ -84,26 +85,7 @@ class Actor(Subject, AutoPrint):
 class Endorsement(models.Model, AutoPrint):
     endorser = models.ForeignKey(Actor, related_name='given_endorsements')
     subject = models.ForeignKey(Subject, related_name='received_endorsements')
-    score = models.FloatField()
+    score = models.FloatField(default=1.0)
     
     def to_string(self):
-        return '{0} -> {1}'.format(self.endorser, self.subject)
-
-class Action(Subject):
-    actor = models.ForeignKey(Actor)
-    weight = models.FloatField()
-    status = models.BooleanField()
-    context = models.ForeignKey(Context, related_name='actions')
-
-    def to_string(self):
-        return 'actor: {0}'.format(self.actor)
-
-class CommitEvent(models.Model):
-    action = models.ForeignKey(Action)
-    
-    def to_string(self):
-        return str(self.action)
-
-class ActionUpdateEvent(models.Model):
-    action = models.ForeignKey(Action)
-    weight = models.FloatField()
+        return '{0} -> {1}: {2}'.format(self.endorser, self.subject, self.score)

@@ -1,23 +1,14 @@
-from django.contrib.auth.models import User
 from django.db import models
-from endorsenet import models as en_models
+import sprint.endorsenet.models as e_models
 
-class AutoPrint(object):
+class TrustActor(e_models.Actor):
+    DEFAULT_SCORE = 1.0
+    trust_score = models.FloatField(default=DEFAULT_SCORE)
+
+class Action(e_models.Subject):
+    actor = models.ForeignKey(TrustActor)
     
-    def to_string(self):
-        return super(AutoPrint, self.__repr__())
-        
-    def __repr__(self):
-        return self.to_string()
-    def __str__(self):
-        return self.to_string()
-    def __unicode__(self):
-        return self.to_string()
-
-# created_x = new model, not saved
-# saved_x = new model, saved
-
-class TrustContext(models.Model, AutoPrint):
-    context = models.ForeignKey(en_models.Context)
-    forgiveness = models.FloatField(default=1.0)
-    
+class TrustEvent(models.Model):
+    date = models.DateTimeField()
+    action = models.ForeignKey(Action)
+    score = models.FloatField()

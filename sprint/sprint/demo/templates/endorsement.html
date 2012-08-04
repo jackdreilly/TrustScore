@@ -1,5 +1,0 @@
-{% load rating %}
-<tr class="endorser-row">
-	<td class="name" data-content='{% render_endorser_popover endorsement.endorse_this %}'><a href="/demo/agent/{{endorsement.endorse_this.pk}}">{{endorsement.endorse_this.username}}</a></td>
-	<td class="score">{% render_score endorsement %}</td>
-</tr>
