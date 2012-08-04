@@ -1,6 +1,7 @@
 from django.db import models
 import sprint.trust.models as t_models
 from datetime import datetime
+import math
 
 class Loan(t_models.TrustAction):
     amount = models.FloatField()
@@ -43,7 +44,7 @@ class Loan(t_models.TrustAction):
         ) > 0
         
     def default_events(self):
-        return self.loan_default_event_set.all()
+        return LoanDefaultEvent.objects.filter(loan=self).all()
         
     def add_new_payment(self, payment):
         payment.save()
@@ -95,7 +96,7 @@ class Payment(models.Model):
     amount = models.FloatField()
     floor = models.FloatField()
     ceiling = models.FloatField()
-    due_date = models.DateTimeField()
+    due_date = models.DateTimeField(auto_now_add=True)
 
     DEFAULT_WEIGHT = 2.0
     PAID_DECAY_RATE = 10.0
@@ -104,11 +105,11 @@ class Payment(models.Model):
     def defaulted(self):
         return len(self.default_events()) > 0
     
-    def last_missed_date(self):
-        missed_events = self.payment_missed_event_set.order('-date')
-        if len(missed_events) is 1:
-            return self.date
-        return missed_events[1].date        
+    def prev_missed_date(self, missed_event):
+        query = PaymentMissedEvent.objects.filter(payment=self).filter(date__lt=missed_event.date).order_by('-date')
+        if len(query) < 1:
+            return missed_event.date
+        return query[0].date
     
     def amount_paid(self):
         return sum(
@@ -120,35 +121,34 @@ class Payment(models.Model):
     def missed_pool(self):
         return self.floor / self.DEFAULT_WEIGHT
 
-    def missed_fn(self, stop):
-        start = self.last_missed_date()
-        factor = self.missed_factor(start, stop)
+    def missed_fn(self, missed_event):
+        start = self.last_missed_date(missed_event)
+        stop = missed_event.date
+        sec_start = self.seconds_from_start(start)
+        sec_stop = self.seconds_from_start(stop)
+        factor = self.missed_factor(sec_start, sec_stop)
         penalty = factor * self.missed_pool
         return penalty
 
     def missed_factor(self, start, stop):
-        start = self.seconds_from_start(start)
-        stop = self.seconds_from_start(stop)
         return math.exp(-start/self.MISSED_DECAY_RATE) - math.exp(-stop/self.MISSED_DECAY_RATE)
         
     def seconds_from_start(self, time):
-        return (time - self.date).total_seconds()
+        return (time - self.due_date).total_seconds()
 
-    def paid_fn(self, t, amount):
-        self.paid+=amount
-        if self.paid >= self.amount:
-            self.loan.payment_finished(self)
-        t_paid_factor = self.paid_factor(t)
+    def paid_fn(self, paid_event):
+        time = self.seconds_from_start(paid_event.date)
+        amount = paid_event.amount
+        t_paid_factor = self.paid_factor(time)
         total_factor = t_paid_factor * amount / self.amount
         reward = total_factor * self.ceiling
         return reward
-
         
     def missed_payment(self):
         return self.new_missed_event()
         
     def paid_events(self):
-        return self.paid_event_set.all()
+        return PaymentPaidEvent.objects.filter(payment=self).all()
         
     def is_active(self):
         return self.amount_paid() >= self.amount
@@ -157,10 +157,21 @@ class Payment(models.Model):
         return not self.is_active()
     
     def missed_events(self):
-        return self.missed_event_set.all()
+        return PaymentMissedEvent.objects.filter(payment=self).all()
+
+    def create_missed_event(self, date = None):
+        if date is None:
+            date = datetime.now()
+        missed_event = PaymentMissedEvent(payment=self, date = date)
+        missed_event.save()
+        return missed_event
         
     def defaulted(self):
         return self.loan.defaulted()
+
+    def paid_factor(self, t):
+        return math.exp(-t/ self.PAID_DECAY_RATE)
+
 
 class LoanEvent(models.Model):
     date = models.DateTimeField()
