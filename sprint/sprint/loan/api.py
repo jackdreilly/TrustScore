@@ -8,7 +8,7 @@ from tastypie.authorization import Authorization
 from tastypie.authentication import BasicAuthentication
 from endorsenet.models import Endorsement
 from trust.models import TrustActor
-from loan.models import Loan, Payment, Borrower, PaymentPaidEvent, PaymentMissedEvent
+from loan.models import Loan, Payment, PaymentPaidEvent, PaymentMissedEvent
 import inflection
 
 class MyModelResource(ModelResource):
