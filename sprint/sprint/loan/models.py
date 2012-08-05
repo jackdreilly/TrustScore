@@ -48,6 +48,11 @@ class Loan(t_models.TrustAction):
     def default(self):
         default = LoanDefaultEvent(loan = self)
         default.save()
+
+    def process_default_event(self, event):
+        self.new_payment(self.amount - self.accounted_amount)
+        for payment in self.active_payments:
+            payment.process_default_event(event)
             
     @property
     def defaulted(self):
@@ -70,20 +75,20 @@ class Loan(t_models.TrustAction):
         return [
             payment
             for payment in self.all_payments
-            if payment.is_active()
+            if payment.is_active
         ]
         
         
     def missed_active_payments(self, time = None):
         for payment in self.active_payments:
-            payment.missed_payment()
+            payment.missed_payment
 
         
     def closed_payment(self):
         return [
             payment
             for payment in self.all_payments
-            if payment.is_closed()
+            if payment.is_closed
         ]
     
     @property    
@@ -123,8 +128,8 @@ class Payment(models.Model):
     DEFAULT_PAYMENT_DAYS = 1
 
     DEFAULT_WEIGHT = 2.0
-    PAID_DECAY_RATE = 10.0
-    MISSED_DECAY_RATE = 2.0
+    PAID_DECAY_RATE = 100000.0
+    MISSED_DECAY_RATE = 200000.0
 
     def save(self, *args, **kwargs):
         if not self.floor:
@@ -177,6 +182,9 @@ class Payment(models.Model):
 
     def process_paid_event(self, paid_event):
         time = self.seconds_from_start(paid_event.date)
+        if time < 0.0:
+            # the paid event happened before the due date, just change t to 0
+            time = 0.0
         amount = paid_event.amount
         t_paid_factor = self.paid_factor(time)
         total_factor = t_paid_factor * amount / self.amount
@@ -196,7 +204,7 @@ class Payment(models.Model):
 
     @property
     def all_trust_events(self):
-        return self.payment_trust_event_set.all()
+        return self.paymenttrustevent_set.all()
         
     @property
     def is_active(self):
@@ -252,14 +260,14 @@ class ProcessAfterSaveMixin(object):
         pass
 
     def save(self, do_process = True, *args, **kwargs):
-        super(LoanEvent, self).save(*args, **kwargs)
+        super(ProcessAfterSaveMixin, self).save(*args, **kwargs)
         if do_process:
             self.process()
 
 class PaymentTrustEvent(t_models.TrustEvent):
     payment = models.ForeignKey(Payment)
 
-class PaymentEvent(models.Model, ProcessAfterSaveMixin):
+class PaymentEvent(ProcessAfterSaveMixin, models.Model):
     payment = models.ForeignKey(Payment)
     date = models.DateTimeField(auto_now_add=True, null=True, blank =True)
     
@@ -267,18 +275,18 @@ class PaymentPaidEvent(PaymentEvent):
     amount = models.FloatField()
 
     def process(self):
-        self.payment.process_paid_payment(self)
+        self.payment.process_paid_event(self)
     
 class PaymentMissedEvent(PaymentEvent):
     
     def process(self):
-        self.payment.process_missed_payment(self)
+        self.payment.process_missed_event(self)
 
-class LoanEvent(models.Model, ProcessAfterSaveMixin):
+class LoanEvent(ProcessAfterSaveMixin, models.Model):
     date = models.DateTimeField(auto_now_add=True, null=True, blank =True)
     loan = models.ForeignKey(Loan)
     
 class LoanDefaultEvent(LoanEvent):
     
     def process(self):
-        self.loan.default()
+        self.loan.process_default_event(self)
