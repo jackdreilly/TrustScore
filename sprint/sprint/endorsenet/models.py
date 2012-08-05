@@ -3,7 +3,12 @@ from django.db import models
 
 
 def default_creator():
-    return User.objects.all()[0]
+    try:
+        return User.objects.all()[0]
+    except IndexError:
+        user = User(username='test', email='test@test.com')
+        user.save()
+        return default_creator()
 
 class AutoPrint(object):
     
@@ -46,6 +51,15 @@ class Subject(models.Model, AutoPrint):
 class Actor(Subject, AutoPrint):
     name = models.CharField(max_length = 100, default = 'Anonymous')
     
+    def endorsement_score_for_subject(self, subject):
+        if self is subject:
+            return 1.0
+        try:
+            gends = self.given_endorsements.filter(subject=subject)
+            return gends[0].score
+        except IndexError:
+            return 0.0
+
     def to_string(self):
         return '{1} - creator: {0}'.format(self.creator, self.name)
   

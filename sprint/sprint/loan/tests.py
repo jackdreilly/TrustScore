@@ -10,7 +10,8 @@ from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.test import TestCase
 from loan.models import Loan, Payment, PaymentPaidEvent, PaymentMissedEvent, LoanDefaultEvent
-from trust.models import TrustActor
+from trust.models import TrustActor, TrustPropagation
+import time
 
 
 class NewLoan(TestCase, unittest.TestCase):
@@ -139,14 +140,13 @@ class FullPaidTest(TestCase, unittest.TestCase):
 
 class EndorsingTest(TestCase, unittest.TestCase):
 
-    def test(self):
+    def setUp(self):
         loan_amount = 10.0
         borrower  = TrustActor(name = "jack")
         borrower.save()
         loan = NewLoan.create_new_loan(loan_amount, borrower)
         endorser  = TrustActor(name = "john")
         endorser.save()
-
         loan.receive_endorsement_from_actor(endorser, 1.0)
 
         borrower.receive_endorsement_from_actor(endorser, 1.0)
@@ -154,3 +154,15 @@ class EndorsingTest(TestCase, unittest.TestCase):
         self.assertEqual(len(loan.all_received_endorsements()), 1)
         self.assertEqual(len(borrower.all_received_endorsements()), 1)
         self.assertEqual(len(endorser.all_given_endorsements()), 2)
+
+        payment = loan.new_payment(5.0)
+        payment.save()
+        payment.complete_payment()
+        
+
+    def test(self):
+        borrower = TrustActor.objects.filter(name='jack')[0]
+        endorser = TrustActor.objects.filter(name='john')[0]
+
+        self.assertGreater(borrower.trust_score, 1.0)
+        self.assertGreater(endorser.trust_score, 1.0)

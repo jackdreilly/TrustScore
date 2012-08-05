@@ -3,6 +3,7 @@ import sprint.trust.models as t_models
 import datetime
 from django.utils.timezone import utc
 import math
+from process_mixin import ProcessAfterSaveMixin
 
 def now():
     return datetime.datetime.utcnow().replace(tzinfo=utc)
@@ -252,17 +253,6 @@ class Payment(models.Model):
         event = PaymentPaidEvent(payment = self,amount = complete_amount)
         event.save()
         return event
-
-
-class ProcessAfterSaveMixin(object):
-
-    def process(self):
-        pass
-
-    def save(self, do_process = True, *args, **kwargs):
-        super(ProcessAfterSaveMixin, self).save(*args, **kwargs)
-        if do_process:
-            self.process()
 
 class PaymentTrustEvent(t_models.TrustEvent):
     payment = models.ForeignKey(Payment)
