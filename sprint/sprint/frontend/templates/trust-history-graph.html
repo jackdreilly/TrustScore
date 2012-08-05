@@ -75,11 +75,11 @@ path {
       return d;
     }).attr('text-anchor', 'end').attr('dy', 2).attr('dx', -4);
     ticks = vis.selectAll('.tickx').data(x.ticks(data.length)).enter().append('svg:g').attr('transform', function(d, i) {
-      return "translate(" + (x(i)) + ", 0)";
+      return "translate(" + (x(data_t[i])) + ", 0)";
     }).attr('class', 'tickx');
     ticks.append('svg:line').attr('y1', h).attr('y2', 0).attr('x1', 0).attr('x2', 0);
     ticks.append('svg:text').text(function(d, i) {
-      return i;
+      return data_t[i];
     }).attr('y', h).attr('dy', 15).attr('dx', -2);
     if (version < 3 && version !== 0) {
       return;
