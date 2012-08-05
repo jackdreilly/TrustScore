@@ -1,7 +1,12 @@
 from django.db import models
 import sprint.trust.models as t_models
-from datetime import datetime
+import datetime
+from django.utils.timezone import utc
 import math
+
+def now():
+    return datetime.datetime.utcnow().replace(tzinfo=utc)
+
 
 class Loan(t_models.TrustAction):
     amount = models.FloatField()
@@ -104,7 +109,10 @@ class Payment(models.Model):
     amount = models.FloatField()
     floor = models.FloatField(blank=True)
     ceiling = models.FloatField(blank=True)
-    due_date = models.DateTimeField(auto_now_add=True)
+    creation_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    due_date = models.DateTimeField(blank=True)
+
+    DEFAULT_PAYMENT_DAYS = 1
 
     DEFAULT_WEIGHT = 2.0
     PAID_DECAY_RATE = 10.0
@@ -115,6 +123,10 @@ class Payment(models.Model):
             self.floor = self.calculate_floor()
         if not self.ceiling:
             self.ceiling = self.calculate_ceiling()
+        if not self.due_date:
+            if not self.creation_date:
+                self.creation_date = now()
+            self.due_date = self.creation_date + datetime.timedelta(self.DEFAULT_PAYMENT_DAYS)
         super(Payment, self).save(*args, **kwargs)
 
     def calculate_floor(self):
@@ -195,12 +207,12 @@ class Payment(models.Model):
 
 
 class LoanEvent(models.Model):
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now_add=True, null=True, blank =True)
     loan = models.ForeignKey(Loan)
 
 class PaymentEvent(models.Model):
     payment = models.ForeignKey(Payment)
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now_add=True, null=True, blank =True)
     
 class PaymentPaidEvent(PaymentEvent):
     amount = models.FloatField()

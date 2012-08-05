@@ -9,88 +9,58 @@ import unittest
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.test import TestCase
-from endorsenet.models import Space
-from endorsenet.models import Context
-
-class SpaceTest(TestCase, unittest.TestCase):
-    def test_create_space(self):
-        user = User()
-        user.save()
-
-        space = Space()
-        space.creator = user
-        space.save()
-
-class ContextTest(TestCase, unittest.TestCase):
-    def test_create_context(self):
-        user = User()
-        user.save()
-
-        space = Space()
-        space.creator = user
-        space.save()
-
-        context = Context()
-        context.space = space
-        context.creator = space.creator
-        context.action_name = 'action'
-        context.actor_name = 'actor'
-        context.save()
+from endorsenet.models import Subject, Endorsement, Actor
 
 
-# class OwnerTest(TestCase, unittest.TestCase):
+class NewSubject(TestCase, unittest.TestCase):
 
-#     def test_create_owner(self):
-#         owner = Owner()
-#         self.assertEquals(owner.pk, None)
-#         owner.save()
-#         self.assertNotEquals(owner.pk, None)
+    def test_create_new_subject(self):
+        subject = Subject()
+        subject.save()
 
-#     def test_create_space(self):
-#         owner = Owner()
-#         self.assertRaises(IntegrityError, lambda: owner.create_space())
+    @classmethod
+    def create_new_subject_w_ex_id(cls, ex_id):
+        subject = Subject(external_id = ex_id)
+        subject.save()
+        return subject
 
-#         owner.save()
-#         space = owner.create_space()
-#         self.assertNotEquals(space.pk, None)
+    def test_duplicate_ex_id(self):
+        ex_id = 30
+        subject = Subject(external_id = ex_id)
+        subject.save()
+        subject = Subject(external_id = ex_id)
+        self.assertRaises(IntegrityError, lambda: subject.save())
+
+
+class NewActor(TestCase, unittest.TestCase):
+
+    @classmethod
+    def create_actor(cls, name):
+        actor = Actor(name=name)
+        actor.save()
+        return actor
+
+    def test_create_actor(self):
+        self.create_actor('jack')
+        self.create_actor('john')
+
+
+class NewEndorsement(TestCase, unittest.TestCase):
+
+    @classmethod
+    def create_endorsement(self, actor, subject, score):
+        ement = Endorsement(endorser=actor, subject=subject, score=score)
+        ement.save()
+        return ement
+
+    def test_create_endorsement(self):
+        actor = NewActor.create_actor('actor')
+        subject = NewSubject.create_new_subject_w_ex_id(42)
+        score = 10.0
+        self.create_endorsement(actor, subject, score)
         
-
-#     def test_new_context(self):
-#         owner = Owner()
-#         owner.save()
-#         space = owner.create_space();
-#         context = owner.new_context(space, "Action", "Person")
-#         self.assertNotEquals(context.pk, None)
-#         self.assertEquals(context.action_name, "Action")
-#         self.assertEquals(context.person_name, "Person")
-#         self.assertEquals(context.space, space)
-
-# class SubjectTest(TestCase, unittest.TestCase):
-    
-#     def new_owner(self):
-#         owner = Owner()
-#         owner.save()
-#         return owner
-
-#     def test_create_subject(self):
-#         """
-#         Tests creation of Subject
-#         """
-#         subject = Subject()
-
-#         # no endorsers right after creation
-#         self.assertEquals(subject.endorsers(), [])
-
-#         # context not yet set
-#         # @todo: should probably add context as param to subject 
-#         #        constructor or make context a factory for subjects
-#         self.assertRaises(Context.DoesNotExist, lambda: subject.context)
-#         self.assertRaises(IntegrityError, lambda: subject.save());
-
-        
-#         # set context and try save again
-#         owner = self.new_owner()
-#         subject.context = owner.new_context(owner.create_space(), "Action", "Person")
-#         subject.save()
-
-#         self.assertNotEquals(subject.pk, None);
+    def test_bad_endorsement(self):
+        actor = NewActor.create_actor('actor')
+        subject = NewSubject.create_new_subject_w_ex_id(42)
+        score = 10.0
+        self.assertRaises(ValueError, lambda: self.create_endorsement(subject, subject, score))
