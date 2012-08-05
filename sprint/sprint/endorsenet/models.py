@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-
+from sprint.auto_print import AutoPrintMixin
 
 def default_creator():
     try:
@@ -10,19 +10,9 @@ def default_creator():
         user.save()
         return default_creator()
 
-class AutoPrint(object):
-    
-    def to_string(self):
-        return super(AutoPrint, self.__repr__())
-        
-    def __repr__(self):
-        return self.to_string()
-    def __str__(self):
-        return self.to_string()
-    def __unicode__(self):
-        return self.to_string()
 
-class Subject(models.Model, AutoPrint):
+
+class Subject(AutoPrintMixin, models.Model):
     creator = models.ForeignKey(User, default = default_creator, blank = True)
     external_id = models.CharField(max_length=100, blank = True, null = True, unique=True)
     creation_date = models.DateTimeField(auto_now_add=True, null=True, blank =True)
@@ -48,7 +38,7 @@ class Subject(models.Model, AutoPrint):
         ement.save()
         return ement
 
-class Actor(Subject, AutoPrint):
+class Actor(Subject):
     name = models.CharField(max_length = 100, default = 'Anonymous')
     
     def endorsement_score_for_subject(self, subject):
@@ -73,7 +63,7 @@ class Actor(Subject, AutoPrint):
     def all_given_endorsements(self):
         return self.given_endorsements.all()
     
-class Endorsement(models.Model, AutoPrint):
+class Endorsement(AutoPrintMixin, models.Model):
     creator = models.ForeignKey(User, default = default_creator, blank = True)
     date = models.DateTimeField(auto_now_add=True,null=True, blank =True)
     endorser = models.ForeignKey(Actor, related_name='given_endorsements')

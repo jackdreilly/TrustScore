@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load trust %}
+{% block content %}
+<h1>Loan {{loan.pk}}</h1>
+<h2>Borrower: {{loan.actor.name}}</h2>
+<h2>Trust Graph</h2>
+{% trust_history_graph loan.actor %}
+{% endblock content %}

@@ -2,6 +2,7 @@ from django.db import models
 import sprint.endorsenet.models as e_models
 from process_mixin import ProcessAfterSaveMixin
 import endorsenet.network
+from sprint.auto_print import AutoPrintMixin
 import math
 
 class TheTrustScore(object):
@@ -47,10 +48,21 @@ class TrustActor(e_models.Actor):
     DEFAULT_SCORE = 1.0
     trust_score = models.FloatField(default=DEFAULT_SCORE)
 
+    @property
+    def propagations(self):
+        return self.trustpropagation_set.order_by('event__date')
+
+    def to_string(self):
+        return 'actor: {0}, ts: {1}'.format(self.actor, self.trust_score)
+
+
 class TrustAction(e_models.Subject):
     actor = models.ForeignKey(TrustActor, related_name='actions')
+
+    def to_string(self):
+        return 'actor: {0}'.format(self.actor.to_string())    
     
-class TrustEvent(ProcessAfterSaveMixin, models.Model):
+class TrustEvent(AutoPrintMixin, ProcessAfterSaveMixin, models.Model):
     date = models.DateTimeField(auto_now_add=True)
     action = models.ForeignKey(TrustAction)
     score = models.FloatField()
@@ -58,10 +70,16 @@ class TrustEvent(ProcessAfterSaveMixin, models.Model):
     def process(self):
         TheTrustScore.process_trust_event(self)
 
-class TrustPropagation(ProcessAfterSaveMixin, models.Model):
+    def to_string(self):
+        return 'action: {0}, date: {1}, score: {2}'.format(self.action, self.date, self.score)
+
+class TrustPropagation(AutoPrintMixin, ProcessAfterSaveMixin, models.Model):
     event = models.ForeignKey(TrustEvent)
     score = models.FloatField()
     actor = models.ForeignKey(TrustActor)
 
     def process(self):
         TheTrustScore.process_trust_propagation_event(self)
+
+    def to_string(self):
+        return 'event: {0}, actor: {1}, score: {2}'.format(self.event, self.actor, self.score)
