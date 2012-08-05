@@ -32,11 +32,16 @@ class Subject(models.Model, AutoPrint):
     def endorsers(self):
         return [endorsement.endorser for endorsement in self.received_endorsements.all()]
         
-    def received_endorsements(self):
-        return self.received_endorsement.all()
+    def all_received_endorsements(self):
+        return self.received_endorsements.all()
         
     def to_string(self):
         return str(self.pk)
+
+    def receive_endorsement_from_actor(self, actor, score):
+        ement = Endorsement(endorser = actor, subject = self, score = score)
+        ement.save()
+        return ement
 
 class Actor(Subject, AutoPrint):
     name = models.CharField(max_length = 100, default = 'Anonymous')
@@ -49,10 +54,10 @@ class Actor(Subject, AutoPrint):
     
     @property
     def endorsees():
-        return [endorsement.subject for endorsement in self.given_endorsements()]
+        return [endorsement.subject for endorsement in self.all_given_endorsements()]
         
-    def given_endorsements(self):
-        return self.given_endorsement.all()
+    def all_given_endorsements(self):
+        return self.given_endorsements.all()
     
 class Endorsement(models.Model, AutoPrint):
     creator = models.ForeignKey(User, default = default_creator, blank = True)

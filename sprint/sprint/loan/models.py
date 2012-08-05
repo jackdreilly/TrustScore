@@ -49,6 +49,7 @@ class Loan(t_models.TrustAction):
         default = LoanDefaultEvent(loan = self)
         default.save()
             
+    @property
     def defaulted(self):
         return len(
             self.default_events()
@@ -64,44 +65,51 @@ class Loan(t_models.TrustAction):
     def trust_ceiling(self):
         return self.CEILING_SCALE * self.amount
     
+    @property
     def active_payments(self):
         return [
             payment
-            for payment in self.all_payments()
+            for payment in self.all_payments
             if payment.is_active()
         ]
         
         
     def missed_active_payments(self, time = None):
-        for payment in self.active_payments():
+        for payment in self.active_payments:
             payment.missed_payment()
 
         
     def closed_payment(self):
         return [
             payment
-            for payment in self.all_payments()
+            for payment in self.all_payments
             if payment.is_closed()
         ]
-        
+    
+    @property    
     def all_payments(self):
-        print dir(self)
         return self.payments.all()
         
+    @property
     def is_active(self):
-        return self.amount_paid() >= self.amount
+        return self.amount_paid < self.amount
+
+    @property
+    def is_closed(self):
+        return not self.is_active
         
+    @property
     def amount_paid(self):
         return sum(
-            payment.amount_paid()
-            for payment in self.all_payments()
+            payment.amount_paid
+            for payment in self.all_payments
         )
         
     @property
     def accounted_amount(self):
         return sum(
             payment.amount
-            for payment in self.all_payments()
+            for payment in self.all_payments
         )
     
 class Payment(models.Model):
@@ -135,33 +143,31 @@ class Payment(models.Model):
     def calculate_ceiling(self):
         return self.loan.ceiling_from_amount(self.amount)
     
-    def defaulted(self):
-        return len(self.default_events()) > 0
-    
     def prev_missed_date(self, missed_event):
         query = PaymentMissedEvent.objects.filter(payment=self).filter(date__lt=missed_event.date).order_by('-date')
         if len(query) < 1:
             return missed_event.date
         return query[0].date
     
+    @property
     def amount_paid(self):
         return sum(
             event.amount
-            for event in self.paid_events()
+            for event in self.paid_events
         )
         
     @property
     def missed_pool(self):
         return self.floor / self.DEFAULT_WEIGHT
 
-    def missed_fn(self, missed_event):
-        start = self.last_missed_date(missed_event)
+    def process_missed_event(self, missed_event):
+        start = self.prev_missed_date(missed_event)
         stop = missed_event.date
         sec_start = self.seconds_from_start(start)
         sec_stop = self.seconds_from_start(stop)
         factor = self.missed_factor(sec_start, sec_stop)
         penalty = factor * self.missed_pool
-        return penalty
+        self.create_trust_event(penalty)
 
     def missed_factor(self, start, stop):
         return math.exp(-start/self.MISSED_DECAY_RATE) - math.exp(-stop/self.MISSED_DECAY_RATE)
@@ -169,56 +175,110 @@ class Payment(models.Model):
     def seconds_from_start(self, time):
         return (time - self.due_date).total_seconds()
 
-    def paid_fn(self, paid_event):
+    def process_paid_event(self, paid_event):
         time = self.seconds_from_start(paid_event.date)
         amount = paid_event.amount
         t_paid_factor = self.paid_factor(time)
         total_factor = t_paid_factor * amount / self.amount
         reward = total_factor * self.ceiling
-        return reward
+        self.create_trust_event(reward)
         
     def missed_payment(self):
         return self.new_missed_event()
         
+    @property
     def paid_events(self):
         return PaymentPaidEvent.objects.filter(payment=self).all()
+
+    @property
+    def all_payment_events(self):
+        return self.payment_event_set.all()
+
+    @property
+    def all_trust_events(self):
+        return self.payment_trust_event_set.all()
         
+    @property
     def is_active(self):
-        return self.amount_paid() >= self.amount
-        
-    def is_closed(self):
-        return not self.is_active()
+        return self.amount_paid < self.amount
     
+    @property
+    def is_closed(self):
+        return not self.is_active
+    
+    @property
     def missed_events(self):
         return PaymentMissedEvent.objects.filter(payment=self).all()
 
     def create_missed_event(self, date = None):
         if date is None:
-            date = datetime.now()
+            date = now()
         missed_event = PaymentMissedEvent(payment=self, date = date)
         missed_event.save()
         return missed_event
+
+    def process_default_event(self, event):
+        prev_scores = sum(t_event.score for t_event in self.all_trust_events)
+        default_score = self.floor
+        penalty = default_score - prev_scores
+        self.create_trust_event(penalty)
+
+    def create_trust_event(self, score):
+        event = PaymentTrustEvent(action=self.loan, payment=self, score=score)
+        event.save()
+        return event
         
+    @property
     def defaulted(self):
-        return self.loan.defaulted()
+        return self.loan.defaulted
 
     def paid_factor(self, t):
         return math.exp(-t/ self.PAID_DECAY_RATE)
 
+    @property
+    def amount_left_to_pay(self):
+        return self.amount - self.amount_paid
 
-class LoanEvent(models.Model):
-    date = models.DateTimeField(auto_now_add=True, null=True, blank =True)
-    loan = models.ForeignKey(Loan)
+    def complete_payment(self):
+        complete_amount = self.amount_left_to_pay
+        event = PaymentPaidEvent(payment = self,amount = complete_amount)
+        event.save()
+        return event
 
-class PaymentEvent(models.Model):
+
+class ProcessAfterSaveMixin(object):
+
+    def process(self):
+        pass
+
+    def save(self, do_process = True, *args, **kwargs):
+        super(LoanEvent, self).save(*args, **kwargs)
+        if do_process:
+            self.process()
+
+class PaymentTrustEvent(t_models.TrustEvent):
+    payment = models.ForeignKey(Payment)
+
+class PaymentEvent(models.Model, ProcessAfterSaveMixin):
     payment = models.ForeignKey(Payment)
     date = models.DateTimeField(auto_now_add=True, null=True, blank =True)
     
 class PaymentPaidEvent(PaymentEvent):
     amount = models.FloatField()
+
+    def process(self):
+        self.payment.process_paid_payment(self)
     
 class PaymentMissedEvent(PaymentEvent):
-    pass
+    
+    def process(self):
+        self.payment.process_missed_payment(self)
+
+class LoanEvent(models.Model, ProcessAfterSaveMixin):
+    date = models.DateTimeField(auto_now_add=True, null=True, blank =True)
+    loan = models.ForeignKey(Loan)
     
 class LoanDefaultEvent(LoanEvent):
-    pass
+    
+    def process(self):
+        self.loan.default()
