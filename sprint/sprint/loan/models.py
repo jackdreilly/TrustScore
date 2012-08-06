@@ -180,7 +180,7 @@ class Payment(AutoPrintMixin, models.Model):
     def amount_paid(self):
         return sum(
             event.amount
-            for event in self.paid_events
+            for event in self.paid_events.all()
         )
         
     @property
@@ -200,8 +200,9 @@ class Payment(AutoPrintMixin, models.Model):
         return math.exp(-start/self.MISSED_DECAY_RATE) - math.exp(-stop/self.MISSED_DECAY_RATE)
         
     def seconds_from_start(self, time):
-        return (time - self.due_date).total_seconds()
-
+    	td = time - self.due_date
+    	return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
+        
     def process_paid_event(self, paid_event):
         time = self.seconds_from_start(paid_event.date)
         if time < 0.0:
@@ -216,10 +217,6 @@ class Payment(AutoPrintMixin, models.Model):
     def missed_payment(self):
         return self.new_missed_event()
         
-    @property
-    def paid_events(self):
-        return PaymentPaidEvent.objects.filter(payment=self).all()
-
     @property
     def all_payment_events(self):
         return self.payment_event_set.all()
@@ -236,10 +233,6 @@ class Payment(AutoPrintMixin, models.Model):
     def is_closed(self):
         return not self.is_active
     
-    @property
-    def missed_events(self):
-        return PaymentMissedEvent.objects.filter(payment=self).all()
-
     def create_missed_event(self, date = None):
         if date is None:
             date = now()
@@ -276,19 +269,22 @@ class Payment(AutoPrintMixin, models.Model):
         return event
 
 class PaymentTrustEvent(t_models.TrustEvent):
-    payment = models.ForeignKey(Payment)
+    payment = models.ForeignKey(Payment, related_name='trust_events')
 
     def to_string(self):
         return 'pmnt: {0}, rest: {1}'.format(self.payment.pk, super(PaymentTrustEvent, self))
 
 class PaymentEvent(AutoPrintMixin, ProcessAfterSaveMixin, models.Model):
-    payment = models.ForeignKey(Payment)
+    class Meta:
+        abstract = True
+    
     date = models.DateTimeField(auto_now_add=True, null=True, blank =True)
 
     def to_string(self):
         return 'pmnt: {0}, date: {1}'.format(self.payment.pk, self.date)
     
 class PaymentPaidEvent(PaymentEvent):
+    payment = models.ForeignKey(Payment, related_name='paid_events')
     amount = models.FloatField()
 
     def process(self):
@@ -298,18 +294,22 @@ class PaymentPaidEvent(PaymentEvent):
         return 'pmnt: {0}, date: {1}, amount: {2}'.format(self.payment.pk, self.date, self.amount)
     
 class PaymentMissedEvent(PaymentEvent):
+    payment = models.ForeignKey(Payment, related_name='missed_events')
     
     def process(self):
         self.payment.process_missed_event(self)
 
 class LoanEvent(AutoPrintMixin, ProcessAfterSaveMixin, models.Model):
-    date = models.DateTimeField(auto_now_add=True, null=True, blank =True)
-    loan = models.ForeignKey(Loan)
+    class Meta:
+        abstract = True
 
+    date = models.DateTimeField(auto_now_add=True, null=True, blank =True)
+    
     def to_string(self):
         return 'loan: {0}, date: {1}'.format(self.loan.pk, self.date)
     
 class LoanDefaultEvent(LoanEvent):
+    loan = models.ForeignKey(Loan, related_name="default_events")
     
     def process(self):
         self.loan.process_default_event(self)
