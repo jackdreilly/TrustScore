@@ -1,9 +1,10 @@
 {% load static %}
 {% load dajaxice_templatetags %}
+{% load bootstrap_toolkit %}
 <head>
     <meta charset="utf-8">
     <title>TrustScore Dashboard</title>
-	<link rel="stylesheet" href="{% get_static_prefix %}bootstrap/css/bootstrap.css">
+	{% bootstrap_stylesheet_tag %}
 	<link rel="stylesheet" href="{% get_static_prefix %}css/style.css">
     <!--[if lt IE 9]>
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>

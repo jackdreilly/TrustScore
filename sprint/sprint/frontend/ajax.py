@@ -23,21 +23,23 @@ class TrustHistory(object):
         ]
 
     def to_jsonable(self):
-    	return {
-    		'actor': self.actor.name,
-    		'propagations': [
-    			{
-    				'event': prop.event.pk,
-    				'actor': prop.event.action.actor.name
-    			}
-    			for prop in self.propagations
-    		],
-    		'y_points', self.y_points,
-    		't_points', self.t_points
-    	}
+        return {
+            'actor': self.actor.name,
+            'creation_date': str(self.actor.creation_date),
+            'propagations': [
+                {
+                    'event': prop.event.pk,
+                    'actor': prop.event.action.actor.name,
+                    'date': str(prop.event.date)
+                }
+                for prop in self.propagations
+            ],
+            'y_points': self.y_points,
+            't_points': self.t_points
+        }
 
 
 @dajaxice_register
 def trust_history(request, actor_pk):
-	actor = TrustActor.objects.get(pk=actor_pk)
+    actor = TrustActor.objects.get(pk=actor_pk)
     return simplejson.dumps(TrustHistory(actor).to_jsonable())

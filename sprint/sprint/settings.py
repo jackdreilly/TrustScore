@@ -20,8 +20,8 @@ DATABASES = {
     }
 }
 
-import dj_database_url
-DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
+# import dj_database_url
+# DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -89,7 +89,7 @@ SECRET_KEY = '!2$^s4_(3mou8_#5u)pu8ct@rt^r=7^o@hklce^-831_80l1pd'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
