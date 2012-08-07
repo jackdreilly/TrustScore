@@ -76,11 +76,8 @@ class Loan(t_models.TrustAction):
     @property
     def defaulted(self):
         return len(
-            self.default_events()
+            self.default_events.all()
         ) > 0
-        
-    def default_events(self):
-        return LoanDefaultEvent.objects.filter(loan=self).all()
         
     def add_new_payment(self, payment):
         payment.save()
