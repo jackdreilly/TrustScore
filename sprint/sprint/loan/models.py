@@ -1,16 +1,10 @@
 from django.db import models
 import sprint.trust.models as t_models
-import datetime
-from django.utils.timezone import utc
 import math
 from process_mixin import ProcessAfterSaveMixin
 from sprint.auto_print import AutoPrintMixin
 import random
-from sprint.util import total_seconds
-
-def now():
-    return datetime.datetime.utcnow().replace(tzinfo=utc)
-
+from sprint.util import total_seconds, now
 
 def random_description():
     descrs = (
