@@ -12,6 +12,7 @@ from django.test import TestCase
 from loan.models import Loan, Payment, PaymentPaidEvent, PaymentMissedEvent, LoanDefaultEvent
 from trust.models import TrustActor, TrustPropagation
 from tastypie.test import ResourceTestCase
+from django.utils.timezone import make_naive, get_current_timezone
 import time
 
 
@@ -180,15 +181,6 @@ class ApiTest(ResourceTestCase):
         self.password = 'bar'
         self.user = User.objects.create_user(self.username, 'foo@bar.com', self.password)
 
-        # The data we'll send on POST requests. Again, because we'll use it
-        # frequently (enough).
-        self.post_data = {
-            'user': '/api/v1/user/{0}/'.format(self.user.pk),
-            'title': 'Second Post!',
-            'slug': 'second-post',
-            'created': '2012-05-01T22:05:12'
-        }
-
     def get_credentials(self):
         return self.create_basic(username=self.username, password=self.password)
 
@@ -197,15 +189,16 @@ class LoanResourceTest(ApiTest):
         super(LoanResourceTest, self).setUp()
 
         self.loan_1 = Loan.objects.get(external_id = 'loan-01')
-        self.loan_1_uri = u'/api/v1/loan/{0}/'.format(self.loan_1.pk)
+        self.loan_1_uri = '/api/v1/loan/{0}/'.format(self.loan_1.pk)
 
     def test_get_list_unauthorzied(self):
         self.assertHttpUnauthorized(self.api_client.get('/api/v1/loan/', format='json'))
 
     def test_get_list_json(self):
-        resp = self.api_client.get('/api/v1/loan/', format='json', authentication=self.get_credentials())
+        limit = min(50, Loan.objects.count()) 
+        resp = self.api_client.get('/api/v1/loan/?limit={0}'.format(limit), format='json', authentication=self.get_credentials())
         self.assertValidJSONResponse(resp)
-        self.assertEqual(len(self.deserialize(resp)['objects']), Loan.objects.count())
+        self.assertEqual(len(self.deserialize(resp)['objects']), limit)
         i=0
         for loan in Loan.objects.all():
             self.assertLoanDetails(self.deserialize(resp)['objects'][i], loan)
@@ -216,10 +209,11 @@ class LoanResourceTest(ApiTest):
         self.assertEqual(json, {
             u'amount': loan.amount,
             u'id': loan.pk,
+            u'description': unicode(loan.description),
             u'borrower': u'/api/v1/actor/{0}/'.format(loan.actor.pk),
-            u'creation_date': unicode(loan.creation_date.isoformat()),
-            u'default_events': [u'/api/v1/loan_default_event/{0}/'.format(loan.default_events.all()[0].pk) for event in loan.default_events.all()],
-            u'endorsements': [u'/api/v1/endorsement/{0}/'.format(loan.endorsements.all()[0].pk) for endorsement in loan.endorsements.all()],
+            u'creation_date': unicode(make_naive(loan.creation_date, get_current_timezone()).isoformat()),
+            u'default_events': [u'/api/v1/loan_default_event/{0}/'.format(event.pk) for event in loan.default_events.all()],
+            u'endorsements': [u'/api/v1/endorsement/{0}/'.format(endorsement.pk) for endorsement in loan.endorsements.all()],
             u'external_id': unicode(loan.external_id),
             u'payments': [u'/api/v1/payment/{0}/'.format(payment.pk) for payment in loan.payments.all()],
             u'resource_uri': u'/api/v1/loan/{0}/'.format(loan.pk)
@@ -229,8 +223,7 @@ class LoanResourceTest(ApiTest):
         self.assertHttpUnauthorized(self.api_client.get(self.loan_1_uri, format='json'))
 
     def test_get_detail_json(self):
-        loan = Loan.objects.get(external_id = 'loan-01')
-        resp = self.api_client.get('/api/v1/loan/{0}/'.format(loan.pk), format='json', authentication=self.get_credentials())
+        resp = self.api_client.get(self.loan_1_uri, format='json', authentication=self.get_credentials())
         self.assertValidJSONResponse(resp)
-        self.assertLoanDetails(self.deserialize(resp), loan)
+        self.assertLoanDetails(self.deserialize(resp), self.loan_1)
         

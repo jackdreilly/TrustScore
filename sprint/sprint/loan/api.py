@@ -12,7 +12,7 @@ from loan.models import Loan, Payment, LoanDefaultEvent, PaymentPaidEvent, Payme
 import inflection
 
 class MyModelResource(ModelResource):
-	def override_urls(self):
+	def prepend_urls(self):
 		urls = []
 	
 		for name, field in self.fields.items():
@@ -22,7 +22,6 @@ class MyModelResource(ModelResource):
 					related_name = field.related_name,
 					related_resource = self.get_class(field.to)._meta.resource_name,
 				)
-				print resource
 				resource = url(resource, field.to_class().wrap_view('dispatch_list'), name="api_dispatch_detail")
 				urls.append(resource)
 		return urls

@@ -9,19 +9,19 @@
             "is_active": true,
             "is_superuser": true,
             "is_staff": true,
-            "last_login": "2012-07-27T21:34:29.491",
+            "last_login": "2012-07-27T21:34:29.491Z",
             "groups": [],
             "user_permissions": [],
             "password": "pbkdf2_sha256$10000$PsaJIMoOAml8$8+5q8maXrizUhxWe+VUzzKOo4GK0ni5O6Gvf0IaY/Wc=",
             "email": "stev@kiva.org",
-            "date_joined": "2012-07-26T03:45:33.032"
+            "date_joined": "2012-07-26T03:45:33.032Z"
         }
     },
     {
         "pk": 1,
         "model": "endorsenet.subject",
         "fields": {
-            "creation_date": "2012-08-06T05:29:01.399",
+            "creation_date": "2012-08-06T05:29:01.399Z",
             "external_id": "borrower-01",
             "creator": 1
         }
@@ -30,7 +30,7 @@
         "pk": 2,
         "model": "endorsenet.subject",
         "fields": {
-            "creation_date": "2012-08-06T05:29:11.139",
+            "creation_date": "2012-08-06T05:29:11.139Z",
             "external_id": "trustee-01",
             "creator": 1
         }
@@ -39,7 +39,7 @@
         "pk": 3,
         "model": "endorsenet.subject",
         "fields": {
-            "creation_date": "2012-08-06T05:29:25.149",
+            "creation_date": "2012-08-06T05:29:25.149Z",
             "external_id": "loan-01",
             "creator": 1
         }
@@ -48,7 +48,7 @@
         "pk": 4,
         "model": "endorsenet.subject",
         "fields": {
-            "creation_date": "2012-08-06T05:29:34.716",
+            "creation_date": "2012-08-06T05:29:34.716Z",
             "external_id": "loan-02",
             "creator": 1
         }
@@ -71,7 +71,7 @@
         "pk": 1,
         "model": "endorsenet.endorsement",
         "fields": {
-            "date": "2012-08-06T07:01:11.198",
+            "date": "2012-08-06T07:01:11.198Z",
             "endorser": 2,
             "subject": 3,
             "score": 1.0,
@@ -110,7 +110,7 @@
         "pk": 1,
         "model": "trust.trustevent",
         "fields": {
-            "date": "2012-08-06T05:39:18.734",
+            "date": "2012-08-06T05:39:18.734Z",
             "action": 3,
             "score": 1.2771248007521554e-12
         }
@@ -119,7 +119,7 @@
         "pk": 2,
         "model": "trust.trustevent",
         "fields": {
-            "date": "2012-08-06T05:39:44.976",
+            "date": "2012-08-06T05:39:44.976Z",
             "action": 3,
             "score": 0.0
         }
@@ -128,7 +128,7 @@
         "pk": 3,
         "model": "trust.trustevent",
         "fields": {
-            "date": "2012-08-06T05:45:37.937",
+            "date": "2012-08-06T05:45:37.937Z",
             "action": 3,
             "score": -271.82818284590456
         }
@@ -137,7 +137,7 @@
         "pk": 4,
         "model": "trust.trustevent",
         "fields": {
-            "date": "2012-08-06T05:56:57.239",
+            "date": "2012-08-06T05:56:57.239Z",
             "action": 3,
             "score": 6.3183570527205916e-13
         }
@@ -146,7 +146,7 @@
         "pk": 5,
         "model": "trust.trustevent",
         "fields": {
-            "date": "2012-08-06T05:57:38.733",
+            "date": "2012-08-06T05:57:38.733Z",
             "action": 3,
             "score": 0.27075064940255505
         }
@@ -214,11 +214,11 @@
         "pk": 1,
         "model": "loan.payment",
         "fields": {
-            "due_date": "2012-06-30T05:00:00",
+            "due_date": "2012-06-30T05:00:00Z",
             "ceiling": 100.0,
             "floor": -100.0,
             "loan": 3,
-            "creation_date": "2012-08-06T05:30:15.944",
+            "creation_date": "2012-08-06T05:30:15.944Z",
             "amount": 100.0
         }
     },
@@ -226,11 +226,11 @@
         "pk": 2,
         "model": "loan.payment",
         "fields": {
-            "due_date": "2012-07-31T05:00:00",
+            "due_date": "2012-07-31T05:00:00Z",
             "ceiling": 100.0,
             "floor": -271.82818284590456,
             "loan": 3,
-            "creation_date": "2012-08-06T05:30:36.972",
+            "creation_date": "2012-08-06T05:30:36.972Z",
             "amount": 100.0
         }
     },
@@ -238,11 +238,11 @@
         "pk": 3,
         "model": "loan.payment",
         "fields": {
-            "due_date": "2012-08-07T05:45:37.931",
+            "due_date": "2012-08-07T05:45:37.931Z",
             "ceiling": -100.0,
             "floor": 271.82818284590456,
             "loan": 3,
-            "creation_date": "2012-08-06T05:45:37.931",
+            "creation_date": "2012-08-06T05:45:37.931Z",
             "amount": -100.0
         }
     },
@@ -285,7 +285,7 @@
         "pk": 1,
         "model": "loan.paymentpaidevent",
         "fields": {
-            "date": "2012-08-06T05:39:18.719",
+            "date": "2012-08-06T05:39:18.719Z",
             "amount": 100.0,
             "payment": 1
         }
@@ -294,7 +294,7 @@
         "pk": 2,
         "model": "loan.paymentpaidevent",
         "fields": {
-            "date": "2012-08-06T05:57:38.575",
+            "date": "2012-08-06T05:57:38.575Z",
             "amount": 50.0,
             "payment": 2
         }
@@ -303,7 +303,7 @@
         "pk": 1,
         "model": "loan.paymentmissedevent",
         "fields": {
-            "date": "2012-08-06T05:39:44.973",
+            "date": "2012-08-06T05:39:44.973Z",
             "payment": 2
         }
     },
@@ -311,7 +311,7 @@
         "pk": 1,
         "model": "loan.loandefaultevent",
         "fields": {
-            "date": "2012-08-06T05:45:37.923",
+            "date": "2012-08-06T05:45:37.923Z",
             "loan": 3
         }
     }
