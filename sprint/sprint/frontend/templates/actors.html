@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load loan %}
+
+{% block content %}
+<section class="tab-pane" id="tab2">
+	<div class="alert alert-info">
+		<h4>Developer Note:</h4>
+		<ul>
+			<li>open/close agent drawer. agent drawer shows current loan description (linked), and status.</li>
+			<li>show agent view</li>
+			<li>add agent search</li>
+		</ul>
+	</div>
+
+	<header class="pane-header">
+		<form class="form-search pull-right">
+			<input type="text" class="search-query" placeholder="Search Agents">
+		</form>
+		<h2>Borrowers</h2>
+	</header>
+	<div class="pane-body">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th></th>
+					<th>Name</th>
+					<th>Trust Score</th>
+					<th>Loans</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for actor in actors %}
+				<tr>
+					<td><a href="#"><i class="icon-chevron-right"></i></a></td>
+					<td><a href="{% url frontend:actor-detail actor.pk %}">{{actor.name}}</a></td>
+					<td>{{actor.trust_score}}</td>
+					<td>{{actor.loans|length}}</td>
+					<td>
+						{% include "agent-actions.html" %}
+					</td>
+				</tr>
+				<tr>
+					<td colspan="6">
+						<table class="table">
+							<caption>{{ actor.name}}'s Loans</caption>
+							<tbody>
+								{% for loan in actor.loans %}
+								<tr>
+									<td><a href="{% url frontend:loan-detail loan.pk %}">{{loan.pk}}</a></td>
+									<td>${{loan.amount}}</td>
+									<td>This is the loan description ...</td>
+									<td>{% loan_status_label loan %}</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</section>
+{% endblock content %}
