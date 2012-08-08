@@ -3,24 +3,21 @@
 {% include "head.html" %}
 <body>
 	{% include "dashboard.html" %}
-	<div class="container">
-		<div class="row">
-			<div class="span9">
-				<div class="tabbable">
-					{% include "nav-tabs.html" %}
-					<div class="tab-content">
+	<div id="content">
+		<div class="container">
+			<div class="row">
+				<div class="span12" id="maincontent">
 					{% block content %}
 					{% endblock content %}
-					</div><!-- .tab-content -->
-				</div><!-- .tabbable -->
-			</div><!-- .span9 -->
-
-			{% include "side-view.html" %}
+				</div><!-- #maincontent -->
+			</div>
 		</div>
-	</div>
-	<hr>
-	<div class="container">
-	{% include "footer.html" %}
-	</div> 
+	</div><!-- #content -->
+	<div id="footer">
+		<div class="container">
+			{% include "footer.html" %}
+			{% include "quick-add.html" %}			
+		</div>
+	</div> <!-- #footer-->
 </body>
 </html>
