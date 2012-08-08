@@ -3,15 +3,6 @@
 
 {% block content %}
 <section class="tab-pane" id="tab2">
-	<div class="alert alert-info">
-		<h4>Developer Note:</h4>
-		<ul>
-			<li>open/close agent drawer. agent drawer shows current loan description (linked), and status.</li>
-			<li>show agent view</li>
-			<li>add agent search</li>
-		</ul>
-	</div>
-
 	<header class="pane-header">
 		<form class="form-search pull-right">
 			<input type="text" class="search-query" placeholder="Search Agents">
@@ -47,9 +38,9 @@
 							<tbody>
 								{% for loan in actor.loans.all %}
 								<tr>
-									<td><a href="{% url frontend:loan-detail loan.pk %}">{{loan.pk}}</a></td>
-									<td>${{loan.amount}}</td>
-									<td>This is the loan description ...</td>
+									<td><a href="{% url frontend:loan-detail loan.pk %}">{{loan.description}}</a></td>
+									<td>${{loan.amount|floatformat:2}}</td>
+									<td></td>
 									<td>{% loan_status_label loan %}</td>
 								</tr>
 								{% endfor %}
