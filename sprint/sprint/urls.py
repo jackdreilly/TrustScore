@@ -19,8 +19,8 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^', include('frontend.urls', namespace='frontend',app_name='frontend')),
-
     url(r'^api/', include('loan.urls')),
+
+    url(r'^', include('frontend.urls', namespace='frontend',app_name='frontend')),
 
 )

@@ -12,18 +12,49 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
-        loans =Loan.objects.all()
-        active_loans = [loan for loan in loans if loan.status is Loan.Status.ACTIVE]
-        context['loans'] = loans
+
+        active_loans = [loan for loan in Loan.objects.all() if loan.status is Loan.Status.ACTIVE]
+
         context['active_loans'] = active_loans
-        actors = TrustActor.objects.all()
-        for actor in actors:
-            actor.loans = Loan.get_loans_for_actor(actor)
-        context['actors'] = actors
+
         context['actor_add_view'] = ActorAddView.as_view()(self.request).render().rendered_content
         context['loan_add_view'] = LoanAddView.as_view()(self.request).render().rendered_content
         context['endorsement_add_view'] = EndorsementAddView.as_view()(self.request).render().rendered_content
         return context
+
+class ActorsView(TemplateView):
+
+    template_name = "actors.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ActorsView, self).get_context_data(**kwargs)
+
+        actors = TrustActor.objects.all()
+
+        context['actors'] = actors
+
+        context['actor_add_view'] = ActorAddView.as_view()(self.request).render().rendered_content
+        context['loan_add_view'] = LoanAddView.as_view()(self.request).render().rendered_content
+        context['endorsement_add_view'] = EndorsementAddView.as_view()(self.request).render().rendered_content
+        return context
+
+class LoansView(TemplateView):
+
+    template_name = "loans.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(LoansView, self).get_context_data(**kwargs)
+
+        loans = Loan.objects.all()
+
+        context['loans'] = loans
+
+        context['actor_add_view'] = ActorAddView.as_view()(self.request).render().rendered_content
+        context['loan_add_view'] = LoanAddView.as_view()(self.request).render().rendered_content
+        context['endorsement_add_view'] = EndorsementAddView.as_view()(self.request).render().rendered_content
+        return context
+
+
 
 
 class LoanDetailView(DetailView):

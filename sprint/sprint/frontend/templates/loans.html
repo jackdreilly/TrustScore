@@ -1,134 +1,65 @@
-<section class="tab-pane" id="tab3">
+{% extends "base.html" %}
+{% load loan %}
 
+{% block content %}
+<section class="tab-pane" id="tab2">
 	<div class="alert alert-info">
-		<h4>Developer Note: Loans</h4>
+		<h4>Developer Note:</h4>
 		<ul>
-			<li>add ordering</li>
-			<li>connect Agent Names to Agent tab</li>
+			<li>open/close agent drawer. agent drawer shows current loan description (linked), and status.</li>
+			<li>show agent view</li>
+			<li>add agent search</li>
 		</ul>
 	</div>
 
 	<header class="pane-header">
 		<form class="form-search pull-right">
-			<input type="text" class="search-query" placeholder="Search Loans">
+			<input type="text" class="search-query" placeholder="Search Agents">
 		</form>
-		<h2>Loans</h2>
+		<h2>Borrowers</h2>
 	</header>
 	<div class="pane-body">
 		<table class="table table-striped">
 			<thead>
 				<tr>
 					<th></th>
-					<th>Loan ID</th>
-					<th>Amount</th>
-					<th>Agent Name</th>
-					<th>Status</th>
+					<th>Name</th>
+					<th>Trust Score</th>
+					<th>Loans</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
+				{% for actor in actors %}
 				<tr>
-					<td><a href="#"><i class="icon-chevron-down"></i></a></td>
-					<td><a href="">XR-889-08</a></td>
-					<td>$560</td>
-					<td><a href="#">Person's Name</a></td>
+					<td><a href="#"><i class="icon-chevron-right"></i></a></td>
+					<td><a href="{% url frontend:actor-detail actor.pk %}">{{actor.name}}</a></td>
+					<td>{{actor.trust_score}}</td>
+					<td>{{actor.loans|length}}</td>
 					<td>
-						<div class="btn-group">
-							<button class="btn btn-success" href="#">Approved</button>
-							<button class="btn btn-success dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-							{% include "loan-status-options.html" %}
-						</div>
-					</td>
-					<td>
-						{% include "loan-actions.html" %}
+						{% include "agent-actions.html" %}
 					</td>
 				</tr>
 				<tr>
 					<td colspan="6">
-						<p><strong>Description:</strong> This is the description for the loan.</p>
+						<table class="table">
+							<caption>{{ actor.name}}'s Loans</caption>
+							<tbody>
+								{% for loan in actor.loans %}
+								<tr>
+									<td><a href="{% url frontend:loan-detail loan.pk %}">{{loan.pk}}</a></td>
+									<td>${{loan.amount}}</td>
+									<td>This is the loan description ...</td>
+									<td>{% loan_status_label loan %}</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
 					</td>
 				</tr>
-				<tr>
-					<td><a href="#"><i class="icon-chevron-right"></i></a></td>
-					<td><a href="#">KV-hh9-o9</a></td>
-					<td>$200</td>
-					<td><a href="#">Another Person's Name</a></td>
-					<td>
-						<div class="btn-group">
-							<button class="btn btn-warning" href="#">Needs Recommendation</button>
-							<button class="btn btn-warning dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-							{% include "loan-status-options.html" %}
-						</div>
-					</td>
-					<td>
-						{% include "loan-actions.html" %}
-					</td>
-				</tr>
-				<tr>
-					<td><a href="#"><i class="icon-chevron-right"></i></a></td>
-					<td><a href="#">KV-hh9-o9</a></td>
-					<td>$200</td>
-					<td><a href="#">Another Person's Name</a></td>
-					<td>
-						<div class="btn-group">
-							<button class="btn btn-info" href="#">Awaiting Action</button>
-							<button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-							{% include "loan-status-options.html" %}
-						</div>
-					</td>
-					<td>
-						{% include "loan-actions.html" %}
-					</td>
-				</tr>
-				<tr>
-					<td><a href="#"><i class="icon-chevron-right"></i></a></td>
-					<td><a href="#">KV-hh9-o9</a></td>
-					<td>$200</td>
-					<td><a href="#">Another Person's Name</a></td>
-					<td>
-						<div class="btn-group">
-							<button class="btn btn-primary" href="#">In Process</button>
-							<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-							{% include "loan-status-options.html" %}
-						</div>
-					</td>
-					<td>
-						{% include "loan-actions.html" %}
-					</td>
-				</tr>
-				<tr>
-					<td><a href="#"><i class="icon-chevron-right"></i></a></td>
-					<td><a href="#">KV-hh9-o9</a></td>
-					<td>$200</td>
-					<td><a href="#">Another Person's Name</a></td>
-					<td>
-						<div class="btn-group">
-							<button class="btn btn-danger" href="#">Defaulted</button>
-							<button class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-							{% include "loan-status-options.html" %}
-						</div>
-					</td>
-					<td>
-						{% include "loan-actions.html" %}
-					</td>
-				</tr>
-				<tr>
-					<td><a href="#"><i class="icon-chevron-right"></i></a></td>
-					<td><a href="#">KV-hh9-o9</a></td>
-					<td>$200</td>
-					<td><a href="#">Another Person's Name</a></td>
-					<td>
-						<div class="btn-group">
-							<button class="btn btn-inverse" href="#">Closed</button>
-							<button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-							{% include "loan-status-options.html" %}
-						</div>
-					</td>
-					<td>
-						{% include "loan-actions.html" %}
-					</td>
-				</tr>
+				{% endfor %}
 			</tbody>
 		</table>
 	</div>
 </section>
+{% endblock content %}
