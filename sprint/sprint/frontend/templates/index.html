@@ -11,28 +11,6 @@
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#main-accordion" href="#collapseOne">Active Loans</a>
 			</div>
 			<div id="collapseOne" class="accordion-body collapse in">
-				<div class="accordion-inner">
-					<table class="table table-striped">
-						<thead>
-							<tr>
-								<th>Loan ID</th>
-								<th>Amount</th>
-								<th>Agent Name</th>
-								<th>Status</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for loan in active_loans %}
-							<tr>
-								<td><a href="{% url frontend:loan-detail loan.pk %}">{{loan.pk}}</a></td>
-								<td>${{loan.amount}}</td>
-								<td><a href="{% url frontend:actor-detail loan.actor.pk %}">{{loan.actor.name}}</a></td>
-								<td><span class="label label-info">Awaiting Action</span></td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
 				<div id="collapseOne" class="accordion-body collapse in">
 					<div class="accordion-inner">
 						<table class="table table-striped">
@@ -48,7 +26,7 @@
 								{% for loan in active_loans %}
 								<tr>
 									<td><a href="{% url frontend:loan-detail loan.pk %}">{{loan.description}}</a></td>
-									<td>${{loan.amount}}</td>
+									<td>${{loan.amount|floatformat:2}}</td>
 									<td><a href="{% url frontend:actor-detail loan.actor.pk %}">{{loan.actor.name}}</a></td>
 									<td><span class="label label-info">Awaiting Action</span></td>
 								</tr>

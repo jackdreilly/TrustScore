@@ -30,7 +30,8 @@ class ActorsView(TemplateView):
         context = super(ActorsView, self).get_context_data(**kwargs)
 
         actors = TrustActor.objects.all()
-
+        for actor in actors:
+            actor.loans = Loan.objects.filter(actor=actor)
         context['actors'] = actors
 
         context['actor_add_view'] = ActorAddView.as_view()(self.request).render().rendered_content

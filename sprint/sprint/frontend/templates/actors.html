@@ -45,7 +45,7 @@
 						<table class="table">
 							<caption>{{ actor.name}}'s Loans</caption>
 							<tbody>
-								{% for loan in actor.loans %}
+								{% for loan in actor.loans.all %}
 								<tr>
 									<td><a href="{% url frontend:loan-detail loan.pk %}">{{loan.pk}}</a></td>
 									<td>${{loan.amount}}</td>
