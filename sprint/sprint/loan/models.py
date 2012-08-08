@@ -6,6 +6,8 @@ import math
 from process_mixin import ProcessAfterSaveMixin
 from sprint.auto_print import AutoPrintMixin
 import random
+from sprint.util import total_seconds
+
 def now():
     return datetime.datetime.utcnow().replace(tzinfo=utc)
 
@@ -39,6 +41,10 @@ class Loan(t_models.TrustAction):
         return Loan.objects.filter(actor=actor)
 
     @property
+    def endorsements(self):
+        return self.received_endorsements
+
+    @property
     def trust_floor(self):
         return -1.0 * self.FLOOR_SCALE * self.amount
 
@@ -46,7 +52,7 @@ class Loan(t_models.TrustAction):
         # the proportion of the entire penalty pool to assign to the current loan
         return (math.exp(amount / self.amount) - 1) / (math.exp(1.0) - 1)
 
-    def payment_floor_factor(self, amount): 
+    def payment_floor_factor(self, amount):
         return self.floor_fn(self.accounted_amount + amount) - self.floor_fn(self.accounted_amount)
 
     def ceiling_fn(self, amount):
@@ -54,11 +60,11 @@ class Loan(t_models.TrustAction):
 
     def payment_ceiling_factor(self, amount):
         return self.ceiling_fn(self.accounted_amount + amount) - self.ceiling_fn(self.accounted_amount)
-        
+
     def new_payment(self, amount):
         loan = self
         floor = self.floor_from_amount(amount)
-        ceiling = self.ceiling_from_amount(amount) 
+        ceiling = self.ceiling_from_amount(amount)
         payment = Payment(loan=loan, amount=amount, floor=floor, ceiling=ceiling)
         self.add_new_payment(payment)
         return payment
@@ -68,9 +74,13 @@ class Loan(t_models.TrustAction):
 
     def ceiling_from_amount(self, amount):
         return self.payment_ceiling_factor(amount) * self.trust_ceiling
-        
+
+    @property
+    def default_events(self):
+        return LoanDefaultEvent.objects.filter(loan=self)
+
     def default(self):
-        default = LoanDefaultEvent(loan = self)
+        default = LoanDefaultEvent(loan=self)
         default.save()
 
     def process_default_event(self, event):
@@ -85,20 +95,20 @@ class Loan(t_models.TrustAction):
         if self.defaulted:
             return self.Status.DEFAULTED
         return self.Status.ACTIVE
-            
+
     @property
     def defaulted(self):
         return len(
             self.default_events.all()
         ) > 0
-        
+
     def add_new_payment(self, payment):
         payment.save()
 
     @property
     def trust_ceiling(self):
         return self.CEILING_SCALE * self.amount
-    
+
     @property
     def active_payments(self):
         return [
@@ -106,24 +116,22 @@ class Loan(t_models.TrustAction):
             for payment in self.all_payments
             if payment.is_active
         ]
-        
-        
-    def missed_active_payments(self, time = None):
+
+    def missed_active_payments(self, time=None):
         for payment in self.active_payments:
             payment.missed_payment
 
-        
     def closed_payment(self):
         return [
             payment
             for payment in self.all_payments
             if payment.is_closed
         ]
-    
-    @property    
+
+    @property
     def all_payments(self):
         return self.payments.all()
-        
+
     @property
     def is_active(self):
         return self.amount_paid < self.amount
@@ -131,21 +139,22 @@ class Loan(t_models.TrustAction):
     @property
     def is_closed(self):
         return not self.is_active
-        
+
     @property
     def amount_paid(self):
         return sum(
             payment.amount_paid
             for payment in self.all_payments
         )
-        
+
     @property
     def accounted_amount(self):
         return sum(
             payment.amount
             for payment in self.all_payments
         )
-    
+
+
 class Payment(AutoPrintMixin, models.Model):
     loan = models.ForeignKey(Loan, related_name="payments")
     amount = models.FloatField()
@@ -179,20 +188,28 @@ class Payment(AutoPrintMixin, models.Model):
 
     def calculate_ceiling(self):
         return self.loan.ceiling_from_amount(self.amount)
-    
+
     def prev_missed_date(self, missed_event):
         query = PaymentMissedEvent.objects.filter(payment=self).filter(date__lt=missed_event.date).order_by('-date')
         if len(query) < 1:
             return missed_event.date
         return query[0].date
-    
+
+    @property
+    def paid_events(self):
+        return PaymentPaidEvent.objects.filter(payment=self)
+
+    @property
+    def missed_events(self):
+        return PaymentMissedEvent.objects.filter(payment=self)
+
     @property
     def amount_paid(self):
         return sum(
             event.amount
             for event in self.paid_events.all()
         )
-        
+
     @property
     def missed_pool(self):
         return self.floor / self.DEFAULT_WEIGHT
@@ -207,11 +224,10 @@ class Payment(AutoPrintMixin, models.Model):
         self.create_trust_event(penalty)
 
     def missed_factor(self, start, stop):
-        return math.exp(-start/self.MISSED_DECAY_RATE) - math.exp(-stop/self.MISSED_DECAY_RATE)
-        
+        return math.exp(-start / self.MISSED_DECAY_RATE) - math.exp(-stop / self.MISSED_DECAY_RATE)
+
     def seconds_from_start(self, time):
-    	td = time - self.due_date
-    	return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
+        return total_seconds(time - self.due_date)
         
     def process_paid_event(self, paid_event):
         time = self.seconds_from_start(paid_event.date)
@@ -223,10 +239,10 @@ class Payment(AutoPrintMixin, models.Model):
         total_factor = t_paid_factor * amount / self.amount
         reward = total_factor * self.ceiling
         self.create_trust_event(reward)
-        
+
     def missed_payment(self):
         return self.new_missed_event()
-        
+
     @property
     def all_payment_events(self):
         return self.payment_event_set.all()
@@ -234,19 +250,19 @@ class Payment(AutoPrintMixin, models.Model):
     @property
     def all_trust_events(self):
         return self.paymenttrustevent_set.all()
-        
+
     @property
     def is_active(self):
         return self.amount_paid < self.amount
-    
+
     @property
     def is_closed(self):
         return not self.is_active
-    
-    def create_missed_event(self, date = None):
+
+    def create_missed_event(self, date=None):
         if date is None:
             date = now()
-        missed_event = PaymentMissedEvent(payment=self, date = date)
+        missed_event = PaymentMissedEvent(payment=self, date=date)
         missed_event.save()
         return missed_event
 
@@ -260,13 +276,13 @@ class Payment(AutoPrintMixin, models.Model):
         event = PaymentTrustEvent(action=self.loan, payment=self, score=score)
         event.save()
         return event
-        
+
     @property
     def defaulted(self):
         return self.loan.defaulted
 
     def paid_factor(self, t):
-        return math.exp(-t/ self.PAID_DECAY_RATE)
+        return math.exp(-t / self.PAID_DECAY_RATE)
 
     @property
     def amount_left_to_pay(self):
@@ -274,9 +290,10 @@ class Payment(AutoPrintMixin, models.Model):
 
     def complete_payment(self):
         complete_amount = self.amount_left_to_pay
-        event = PaymentPaidEvent(payment = self,amount = complete_amount)
+        event = PaymentPaidEvent(payment=self, amount=complete_amount)
         event.save()
         return event
+
 
 class PaymentTrustEvent(t_models.TrustEvent):
     payment = models.ForeignKey(Payment, related_name='trust_events')
@@ -284,17 +301,19 @@ class PaymentTrustEvent(t_models.TrustEvent):
     def to_string(self):
         return 'pmnt: {0}, rest: {1}'.format(self.payment.pk, super(PaymentTrustEvent, self))
 
+
 class PaymentEvent(AutoPrintMixin, ProcessAfterSaveMixin, models.Model):
     class Meta:
         abstract = True
-    
-    date = models.DateTimeField(auto_now_add=True, null=True, blank =True)
+
+    payment = models.ForeignKey(Payment)
+    date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def to_string(self):
         return 'pmnt: {0}, date: {1}'.format(self.payment.pk, self.date)
-    
+
+
 class PaymentPaidEvent(PaymentEvent):
-    payment = models.ForeignKey(Payment, related_name='paid_events')
     amount = models.FloatField()
 
     def process(self):
@@ -302,24 +321,23 @@ class PaymentPaidEvent(PaymentEvent):
 
     def to_string(self):
         return 'pmnt: {0}, date: {1}, amount: {2}'.format(self.payment.pk, self.date, self.amount)
-    
+
+
 class PaymentMissedEvent(PaymentEvent):
-    payment = models.ForeignKey(Payment, related_name='missed_events')
-    
     def process(self):
         self.payment.process_missed_event(self)
+
 
 class LoanEvent(AutoPrintMixin, ProcessAfterSaveMixin, models.Model):
     class Meta:
         abstract = True
+    loan = models.ForeignKey(Loan)
+    date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
-    date = models.DateTimeField(auto_now_add=True, null=True, blank =True)
-    
     def to_string(self):
         return 'loan: {0}, date: {1}'.format(self.loan.pk, self.date)
-    
+
+
 class LoanDefaultEvent(LoanEvent):
-    loan = models.ForeignKey(Loan, related_name="default_events")
-    
     def process(self):
         self.loan.process_default_event(self)
