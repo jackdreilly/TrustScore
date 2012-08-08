@@ -75,10 +75,6 @@ class Loan(t_models.TrustAction):
     def ceiling_from_amount(self, amount):
         return self.payment_ceiling_factor(amount) * self.trust_ceiling
 
-    @property
-    def default_events(self):
-        return LoanDefaultEvent.objects.filter(loan=self)
-
     def default(self):
         default = LoanDefaultEvent(loan=self)
         default.save()
@@ -196,14 +192,6 @@ class Payment(AutoPrintMixin, models.Model):
         return query[0].date
 
     @property
-    def paid_events(self):
-        return PaymentPaidEvent.objects.filter(payment=self)
-
-    @property
-    def missed_events(self):
-        return PaymentMissedEvent.objects.filter(payment=self)
-
-    @property
     def amount_paid(self):
         return sum(
             event.amount
@@ -306,7 +294,6 @@ class PaymentEvent(AutoPrintMixin, ProcessAfterSaveMixin, models.Model):
     class Meta:
         abstract = True
 
-    payment = models.ForeignKey(Payment)
     date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def to_string(self):
@@ -314,6 +301,7 @@ class PaymentEvent(AutoPrintMixin, ProcessAfterSaveMixin, models.Model):
 
 
 class PaymentPaidEvent(PaymentEvent):
+    payment = models.ForeignKey(Payment, related_name='paid_events')
     amount = models.FloatField()
 
     def process(self):
@@ -324,6 +312,7 @@ class PaymentPaidEvent(PaymentEvent):
 
 
 class PaymentMissedEvent(PaymentEvent):
+    payment = models.ForeignKey(Payment, related_name='missed_events')
     def process(self):
         self.payment.process_missed_event(self)
 
@@ -331,7 +320,6 @@ class PaymentMissedEvent(PaymentEvent):
 class LoanEvent(AutoPrintMixin, ProcessAfterSaveMixin, models.Model):
     class Meta:
         abstract = True
-    loan = models.ForeignKey(Loan)
     date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def to_string(self):
@@ -339,5 +327,6 @@ class LoanEvent(AutoPrintMixin, ProcessAfterSaveMixin, models.Model):
 
 
 class LoanDefaultEvent(LoanEvent):
+    loan = models.ForeignKey(Loan, related_name='default_events')
     def process(self):
         self.loan.process_default_event(self)
