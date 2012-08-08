@@ -26,13 +26,12 @@ body {margin:0; background:#4f848a url(../img/bg-inverse.png) fixed;}
 .navbar .nav li.dropdown.open .dropdown-toggle,
 .navbar .nav li.dropdown.open.active .dropdown-toggle {color:#c65b00; background:#fff; border-color:#ddd;}
 
+#content {background:#efcaaa url(../img/bg.png) fixed; padding:192px 0 72px; border-bottom:1px solid #fff; min-height:300px;}
+#footer {padding:12px 0 36px; border-top:1px solid #000; color:#666;}
+
 table.table.table-striped tbody tr td {background-color:#fff;}
 table.table.table-striped tbody tr td[colspan] {background:#ddd;}
 table.table.table-striped tbody tr td[colspan] td {background:transparent; border-color:#bbb;}
-
-/*.page-content {display:none;}
-.page-content.active {display:block;}
-*/
 
 /*.accordion-group {border:0; margin-bottom:18px;}
 .accordion-heading .accordion-toggle,
@@ -52,8 +51,9 @@ table.table.table-striped tbody tr td[colspan] td {background:transparent; borde
 #tab2 table table td:last-of-type {width:200px;}
 */
 
-#content {background:#efcaaa url(../img/bg.png) fixed; padding:192px 0 72px; border-bottom:1px solid #fff; min-height:300px;}
-#footer {padding:12px 0 36px; border-top:1px solid #000; color:#666;}
+
+
+/* Nathan's Note - unknown styles below */
 
 .chart rect {
 	stroke: darkgray;

@@ -12,6 +12,7 @@
 			</ul>
 		</li>
 	</ul>
+	<!-- these are the main pages -->
 	<ul id="nav-main" class="nav nav-pills">
 		<li class="{% active request "^/$" %}"><a href="{% url frontend:index %}"><span>Action Items</span></a></li>
 		<li class="{% active request "^/actors$" %}"><a href="{% url frontend:actors %}"><span>Agents</span></a></li>
