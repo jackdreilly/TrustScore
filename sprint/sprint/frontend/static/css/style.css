@@ -16,8 +16,10 @@ body {margin:0; background:#4f848a url(../img/bg-inverse.png) fixed;}
 .navbar .nav-collapse form input {margin-bottom:0; background:#fff; border-color:#ddd; box-shadow:none;}
 
 .navbar .nav {margin-top:12px;}
-.navbar .nav > li > a {font-size:120%; text-shadow:none; color:#555; margin-right:6px; padding-top:6px; padding-bottom:6px;}
+.navbar .nav > li > a {font-size:120%; text-shadow:none; color:#555; margin-right:6px; padding:9px 12px;}
 .navbar .nav > li > a:hover {color:#eb7714; background:#fff;}
+.navbar .nav > li.active > a,
+.navbar .nav > li.active > a:hover {background:#eb7714; color:#000; box-shadow:0 0 3px #ccc;}
 .navbar .nav li a i {position:relative; top:2px;}
 .navbar .nav li.dropdown .dropdown-toggle {margin-right:0;}
 .navbar .nav li.dropdown .dropdown-toggle .caret,
