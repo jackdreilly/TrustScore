@@ -5,13 +5,26 @@ from django.utils.timezone import utc
 import math
 from process_mixin import ProcessAfterSaveMixin
 from sprint.auto_print import AutoPrintMixin
-
+import random
 def now():
     return datetime.datetime.utcnow().replace(tzinfo=utc)
 
 
+def random_description():
+    descrs = (
+        'Bake Sale',
+        'Lemonade Stand',
+        'Book Club',
+        'Yarn Barn',
+        'Stuffing Factory',
+        'Suit for my brother',
+        'Lint Farm'
+        )
+    return random.choice(descrs)
+
 class Loan(t_models.TrustAction):
     amount = models.FloatField()
+    description = models.CharField(max_length=200, default=random_description, blank=True)
     
     FLOOR_SCALE = 1.0
     CEILING_SCALE = 1.0
