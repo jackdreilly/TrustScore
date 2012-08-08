@@ -6,7 +6,7 @@
 	<form class="form-search pull-right">
 		<input type="text" class="search-query" placeholder="Search Agents">
 	</form>
-	<h2>Borrowers</h2>
+	<h2>Agents</h2>
 </header>
 <div class="content-body">
 	<table class="table table-striped">
@@ -27,7 +27,7 @@
 				<td>{{actor.trust_score|floatformat:2}}</td>
 				<td>{{actor.loans|length}}</td>
 				<td>
-					{% include "agent-actions.html" %}
+					{% include "actor-actions.html" %}
 				</td>
 			</tr>
 			<tr>
