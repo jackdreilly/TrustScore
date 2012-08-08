@@ -24,7 +24,7 @@
 			<tr>
 				<td><a href="#"><i class="icon-chevron-right"></i></a></td>
 				<td><a href="{% url frontend:actor-detail actor.pk %}">{{actor.name}}</a></td>
-				<td>{{actor.trust_score}}</td>
+				<td>{{actor.trust_score|floatformat:2}}</td>
 				<td>{{actor.loans|length}}</td>
 				<td>
 					{% include "agent-actions.html" %}
@@ -37,9 +37,8 @@
 						<tbody>
 							{% for loan in actor.loans.all %}
 							<tr>
-								<td><a href="{% url frontend:loan-detail loan.pk %}">{{loan.pk}}</a></td>
-								<td>${{loan.amount}}</td>
-								<td>This is the loan description ...</td>
+								<td><a href="{% url frontend:loan-detail loan.pk %}">{{loan.description}}</a></td>
+								<td>${{loan.amount|floatformat:2}}</td>
 								<td>{% loan_status_label loan %}</td>
 							</tr>
 							{% endfor %}
