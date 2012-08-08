@@ -16,7 +16,7 @@ body {margin:192px 0 30px; background:#efcaaa url(../img/bg.png) fixed;}
 
 .navbar .nav {margin-top:12px;}
 .navbar .nav > li > a {font-size:120%; text-shadow:none; color:#555; margin-right:6px; padding-top:6px; padding-bottom:6px;}
-.navbar .nav > li > a:hover {color:#c65b00;}
+.navbar .nav > li > a:hover {color:#eb7714; background:#fff;}
 .navbar .nav li a i {position:relative; top:2px;}
 .navbar .nav li.dropdown .dropdown-toggle {margin-right:0;}
 .navbar .nav li.dropdown .dropdown-toggle .caret,
