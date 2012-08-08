@@ -29,7 +29,8 @@ class NewSubject(TestCase, unittest.TestCase):
         subject = Subject(external_id = ex_id)
         subject.save()
         subject = Subject(external_id = ex_id)
-        self.assertRaises(IntegrityError, lambda: subject.save())
+        # we may add this constraint back in later
+        # self.assertRaises(IntegrityError, lambda: subject.save())
 
 
 class NewActor(TestCase, unittest.TestCase):

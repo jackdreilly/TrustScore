@@ -14,7 +14,7 @@ def default_creator():
 
 class Subject(AutoPrintMixin, models.Model):
     creator = models.ForeignKey(User, default = default_creator, blank = True)
-    external_id = models.CharField(max_length=100, blank = True, null = True, unique=True)
+    external_id = models.CharField(max_length=100, blank = True, null = True, unique=False)
     creation_date = models.DateTimeField(auto_now_add=True, null=True, blank =True)
 
     def save(self, *args, **kwargs):
