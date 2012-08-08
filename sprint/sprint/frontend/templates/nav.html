@@ -1,3 +1,5 @@
+
+{% load frontend %}
 <div class="container">
 	<ul id="nav-actions" class="nav nav-pills pull-right">
 		<li class="dropdown">
@@ -11,9 +13,8 @@
 		</li>
 	</ul>
 	<ul id="nav-main" class="nav nav-pills">
-		<li><a href="{% url frontend:index %}"><span>Action Items</span></a></li>
-		<li><a href="{% url frontend:actors %}"><span>Agents</span></a></li>
-		<li><a href="{% url frontend:loans %}"><span>Loans</span></a></li>
-		<li><a href="{% url frontend:loans %}"><span>Search Results (dynamic tab)</span></a></li>
+		<li class="{% active request "^/$" %}"><a href="{% url frontend:index %}"><span>Action Items</span></a></li>
+		<li class="{% active request "^/actors$" %}"><a href="{% url frontend:actors %}"><span>Agents</span></a></li>
+		<li class="{% active request "^/loans$" %}"><a href="{% url frontend:loans %}"><span>Loans</span></a></li>
 	</ul>
 </div>
