@@ -14,15 +14,17 @@ from trust.models import TrustActor, TrustPropagation
 from tastypie.test import ResourceTestCase
 from django.utils.timezone import make_naive, get_current_timezone
 import time
+from django.test.utils import get_warnings_state, restore_warnings_state
+import warnings
 
 
 class NewLoan(TestCase, unittest.TestCase):
 
     def test_create_new_loan(self):
         amount = 10
-        borrower  = TrustActor(name = "jack")
+        borrower = TrustActor(name="jack")
         borrower.save()
-        loan = self.create_new_loan(borrower = borrower, amount = amount)
+        loan = self.create_new_loan(borrower=borrower, amount=amount)
 
         self.assertFalse(loan.defaulted)
         self.assertEqual(loan.accounted_amount, 0.0)
@@ -30,10 +32,9 @@ class NewLoan(TestCase, unittest.TestCase):
         self.assertFalse(loan.is_closed)
         self.assertTrue(loan.is_active)
 
-
     @classmethod
     def create_new_loan(cls, amount, borrower):
-        loan = Loan(actor = borrower, amount = amount)
+        loan = Loan(actor=borrower, amount=amount)
         loan.save()
         return loan
 
@@ -42,7 +43,7 @@ class NewPayment(TestCase, unittest.TestCase):
 
     def test_create_new_payment(self):
         loan_amount = 10.0
-        borrower  = TrustActor(name = "jack")
+        borrower = TrustActor(name="jack")
         borrower.save()
         loan = NewLoan.create_new_loan(loan_amount, borrower)
         payment_amount = loan_amount / 2.0
@@ -50,20 +51,21 @@ class NewPayment(TestCase, unittest.TestCase):
 
     @classmethod
     def create_new_payment(cls, loan, amount):
-        payment  = Payment(loan=loan, amount=amount)
+        payment = Payment(loan=loan, amount=amount)
         payment.save()
         return payment
+
 
 class NewPaymentPaid(TestCase, unittest.TestCase):
 
     def setUp(self):
         loan_amount = 10.0
-        borrower  = TrustActor(name = "jack")
+        borrower = TrustActor(name="jack")
         borrower.save()
         loan = NewLoan.create_new_loan(loan_amount, borrower)
         payment_amount = loan_amount / 2.0
         payment = NewPayment.create_new_payment(loan=loan, amount=payment_amount)
-        self.payment = payment        
+        self.payment = payment
 
     def test_create_new_payment_paid_full(self):
         paid_amount = self.payment.amount
@@ -76,7 +78,7 @@ class NewPaymentPaid(TestCase, unittest.TestCase):
 
     @classmethod
     def create_new_payment_paid(cls, pmt, amount):
-        paid  = PaymentPaidEvent(payment=pmt, amount=amount)
+        paid = PaymentPaidEvent(payment=pmt, amount=amount)
         paid.save()
         return paid
 
@@ -93,31 +95,33 @@ class NewPaymentPaid(TestCase, unittest.TestCase):
 
         self.assertTrue(payment.is_closed)
 
+
 class NewPaymentMissed(TestCase, unittest.TestCase):
 
     def setUp(self):
         loan_amount = 10.0
-        borrower  = TrustActor(name = "jack")
+        borrower = TrustActor(name="jack")
         borrower.save()
         loan = NewLoan.create_new_loan(loan_amount, borrower)
         payment_amount = loan_amount / 2.0
         payment = NewPayment.create_new_payment(loan=loan, amount=payment_amount)
-        self.payment = payment        
+        self.payment = payment
 
     def test_create_new_payment_missed(self):
         m_event = self.create_new_payment_missed(self.payment)
 
     @classmethod
     def create_new_payment_missed(cls, pmt):
-        m_event  = PaymentMissedEvent(payment=pmt)
+        m_event = PaymentMissedEvent(payment=pmt)
         m_event.save()
         return m_event
+
 
 class FullPaidTest(TestCase, unittest.TestCase):
 
     def setUp(self):
         loan_amount = 10.0
-        borrower  = TrustActor(name = "jack")
+        borrower = TrustActor(name="jack")
         borrower.save()
         loan = NewLoan.create_new_loan(loan_amount, borrower)
         n_splits = 5
@@ -144,10 +148,10 @@ class EndorsingTest(TestCase, unittest.TestCase):
 
     def setUp(self):
         loan_amount = 10.0
-        borrower  = TrustActor(name = "jack")
+        borrower = TrustActor(name="jack")
         borrower.save()
         loan = NewLoan.create_new_loan(loan_amount, borrower)
-        endorser  = TrustActor(name = "john")
+        endorser = TrustActor(name="john")
         endorser.save()
         loan.receive_endorsement_from_actor(endorser, 1.0)
 
@@ -160,7 +164,6 @@ class EndorsingTest(TestCase, unittest.TestCase):
         payment = loan.new_payment(5.0)
         payment.save()
         payment.complete_payment()
-        
 
     def test(self):
         borrower = TrustActor.objects.filter(name='jack')[0]
@@ -169,11 +172,19 @@ class EndorsingTest(TestCase, unittest.TestCase):
         self.assertGreater(borrower.trust_score, 1.0)
         self.assertGreater(endorser.trust_score, 1.0)
 
+
 class ApiTest(ResourceTestCase):
     fixtures = ['fixtures.json']
 
     def setUp(self):
         super(ApiTest, self).setUp()
+
+        self.warnings_state = get_warnings_state()
+
+        # suppress some annoying deprecation warnings caused by the dev version of tastypie
+        warnings.filterwarnings('ignore', category=DeprecationWarning, module='django.views.generic.simple')
+        warnings.filterwarnings('ignore', category=UserWarning, module='tastypie')
+
         self.maxDiff = None
 
         # Create a user.
@@ -181,29 +192,33 @@ class ApiTest(ResourceTestCase):
         self.password = 'bar'
         self.user = User.objects.create_user(self.username, 'foo@bar.com', self.password)
 
+    def tearDown(self):
+        super(ApiTest, self).tearDown()
+        restore_warnings_state(self.warnings_state)
+
     def get_credentials(self):
         return self.create_basic(username=self.username, password=self.password)
+
 
 class LoanResourceTest(ApiTest):
     def setUp(self):
         super(LoanResourceTest, self).setUp()
 
-        self.loan_1 = Loan.objects.get(external_id = 'loan-01')
+        self.loan_1 = Loan.objects.get(external_id='loan-01')
         self.loan_1_uri = '/api/v1/loan/{0}/'.format(self.loan_1.pk)
 
     def test_get_list_unauthorzied(self):
         self.assertHttpUnauthorized(self.api_client.get('/api/v1/loan/', format='json'))
 
     def test_get_list_json(self):
-        limit = min(50, Loan.objects.count()) 
+        limit = min(44, Loan.objects.count())
         resp = self.api_client.get('/api/v1/loan/?limit={0}'.format(limit), format='json', authentication=self.get_credentials())
         self.assertValidJSONResponse(resp)
         self.assertEqual(len(self.deserialize(resp)['objects']), limit)
-        i=0
-        for loan in Loan.objects.all():
+        i = 0
+        for loan in Loan.objects.order_by('id')[:limit]:
             self.assertLoanDetails(self.deserialize(resp)['objects'][i], loan)
             i += 1
-        
 
     def assertLoanDetails(self, json, loan):
         self.assertEqual(json, {
@@ -226,4 +241,3 @@ class LoanResourceTest(ApiTest):
         resp = self.api_client.get(self.loan_1_uri, format='json', authentication=self.get_credentials())
         self.assertValidJSONResponse(resp)
         self.assertLoanDetails(self.deserialize(resp), self.loan_1)
-        
