@@ -1,6 +1,7 @@
 from django.utils import simplejson
 from dajaxice.decorators import dajaxice_register
 from sprint.trust.models import TrustActor
+from sprint.util import total_seconds
 
 def cum_sum(lst):
     new_lst = [lst[0]]
@@ -18,7 +19,7 @@ class TrustHistory(object):
         self.start_date = actor.creation_date
         self.y_points = cum_sum([self.start] + [prop.score for prop in self.propagations])
         self.t_points = [0] + [
-            (prop.event.date - self.start_date).total_seconds()
+            total_seconds(prop.event.date - self.start_date)
             for prop in self.propagations
         ]
 

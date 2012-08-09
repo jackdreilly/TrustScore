@@ -1,5 +1,6 @@
 [
     {
+        "pk": 1,
         "model": "auth.user",
         "fields": {
             "username": "bob",
@@ -20,6 +21,7 @@
         "pk": 1,
         "model": "endorsenet.subject",
         "fields": {
+            "creation_date": "2012-08-06T05:29:01.399Z",
             "external_id": "borrower-01",
             "creator": 1
         }
@@ -28,7 +30,8 @@
         "pk": 2,
         "model": "endorsenet.subject",
         "fields": {
-            "external_id": "loan-01",
+            "creation_date": "2012-08-06T05:29:11.139Z",
+            "external_id": "trustee-01",
             "creator": 1
         }
     },
@@ -36,7 +39,17 @@
         "pk": 3,
         "model": "endorsenet.subject",
         "fields": {
-            "external_id": "trustee-01",
+            "creation_date": "2012-08-06T05:29:25.149Z",
+            "external_id": "loan-01",
+            "creator": 1
+        }
+    },
+    {
+        "pk": 4,
+        "model": "endorsenet.subject",
+        "fields": {
+            "creation_date": "2012-08-06T05:29:34.716Z",
+            "external_id": "loan-02",
             "creator": 1
         }
     },
@@ -48,7 +61,7 @@
         }
     },
     {
-        "pk": 3,
+        "pk": 2,
         "model": "endorsenet.actor",
         "fields": {
             "name": "John Doe"
@@ -58,55 +71,22 @@
         "pk": 1,
         "model": "endorsenet.endorsement",
         "fields": {
-            "endorser": 3,
+            "date": "2012-08-06T07:01:11.198Z",
+            "endorser": 2,
+            "subject": 3,
             "score": 1.0,
-            "subject": 2
+            "creator": 1
+        }
+    },
+    {
+        "pk": 1,
+        "model": "trust.trustactor",
+        "fields": {
+            "trust_score": -270.55743219650014
         }
     },
     {
         "pk": 2,
-        "model": "loan.loan",
-        "fields": {
-            "amount": 1000.0
-        }
-    },
-    {
-        "pk": 1,
-        "model": "loan.payment",
-        "fields": {
-            "due_date": "2012-08-02T02:19:08Z",
-            "loan": 2,
-            "ceiling": 50.0,
-            "amount": 50.0,
-            "floor": 0.0
-        }
-    },
-    {
-        "pk": 2,
-        "model": "loan.payment",
-        "fields": {
-            "due_date": "2012-09-01T05:00:00Z",
-            "loan": 2,
-            "ceiling": 50.0,
-            "amount": 50.0,
-            "floor": 0.0
-        }
-    },
-    {
-        "pk": 1,
-        "model": "loan.paymentevent",
-        "fields": {
-            "date": "2012-08-02T05:00:00Z",
-            "payment": 1
-        }
-    },
-    {
-        "pk": 1,
-        "model": "loan.paymentmissedevent",
-        "fields": {}
-    },
-    {
-        "pk": 1,
         "model": "trust.trustactor",
         "fields": {
             "trust_score": 1.0
@@ -114,16 +94,225 @@
     },
     {
         "pk": 3,
-        "model": "trust.trustactor",
+        "model": "trust.trustaction",
         "fields": {
-            "trust_score": 1.0
+            "actor": 1
+        }
+    },
+    {
+        "pk": 4,
+        "model": "trust.trustaction",
+        "fields": {
+            "actor": 1
+        }
+    },
+    {
+        "pk": 1,
+        "model": "trust.trustevent",
+        "fields": {
+            "date": "2012-08-06T05:39:18.734Z",
+            "action": 3,
+            "score": 1.2771248007521554e-12
         }
     },
     {
         "pk": 2,
-        "model": "trust.trustaction",
+        "model": "trust.trustevent",
         "fields": {
+            "date": "2012-08-06T05:39:44.976Z",
+            "action": 3,
+            "score": 0.0
+        }
+    },
+    {
+        "pk": 3,
+        "model": "trust.trustevent",
+        "fields": {
+            "date": "2012-08-06T05:45:37.937Z",
+            "action": 3,
+            "score": -271.82818284590456
+        }
+    },
+    {
+        "pk": 4,
+        "model": "trust.trustevent",
+        "fields": {
+            "date": "2012-08-06T05:56:57.239Z",
+            "action": 3,
+            "score": 6.3183570527205916e-13
+        }
+    },
+    {
+        "pk": 5,
+        "model": "trust.trustevent",
+        "fields": {
+            "date": "2012-08-06T05:57:38.733Z",
+            "action": 3,
+            "score": 0.27075064940255505
+        }
+    },
+    {
+        "pk": 1,
+        "model": "trust.trustpropagation",
+        "fields": {
+            "score": 1.2771248007521554e-12,
+            "event": 1,
             "actor": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "trust.trustpropagation",
+        "fields": {
+            "score": 0.0,
+            "event": 2,
+            "actor": 1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "trust.trustpropagation",
+        "fields": {
+            "score": -271.82818284590456,
+            "event": 3,
+            "actor": 1
+        }
+    },
+    {
+        "pk": 4,
+        "model": "trust.trustpropagation",
+        "fields": {
+            "score": 6.3183570527205916e-13,
+            "event": 4,
+            "actor": 1
+        }
+    },
+    {
+        "pk": 5,
+        "model": "trust.trustpropagation",
+        "fields": {
+            "score": 0.27075064940255505,
+            "event": 5,
+            "actor": 1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "loan.loan",
+        "fields": {
+            "amount": 1000.0
+        }
+    },
+    {
+        "pk": 4,
+        "model": "loan.loan",
+        "fields": {
+            "amount": 2000.0
+        }
+    },
+    {
+        "pk": 1,
+        "model": "loan.payment",
+        "fields": {
+            "due_date": "2012-06-30T05:00:00Z",
+            "ceiling": 100.0,
+            "floor": -100.0,
+            "loan": 3,
+            "creation_date": "2012-08-06T05:30:15.944Z",
+            "amount": 100.0
+        }
+    },
+    {
+        "pk": 2,
+        "model": "loan.payment",
+        "fields": {
+            "due_date": "2012-07-31T05:00:00Z",
+            "ceiling": 100.0,
+            "floor": -271.82818284590456,
+            "loan": 3,
+            "creation_date": "2012-08-06T05:30:36.972Z",
+            "amount": 100.0
+        }
+    },
+    {
+        "pk": 3,
+        "model": "loan.payment",
+        "fields": {
+            "due_date": "2012-08-07T05:45:37.931Z",
+            "ceiling": -100.0,
+            "floor": 271.82818284590456,
+            "loan": 3,
+            "creation_date": "2012-08-06T05:45:37.931Z",
+            "amount": -100.0
+        }
+    },
+    {
+        "pk": 1,
+        "model": "loan.paymenttrustevent",
+        "fields": {
+            "payment": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "loan.paymenttrustevent",
+        "fields": {
+            "payment": 2
+        }
+    },
+    {
+        "pk": 3,
+        "model": "loan.paymenttrustevent",
+        "fields": {
+            "payment": 2
+        }
+    },
+    {
+        "pk": 4,
+        "model": "loan.paymenttrustevent",
+        "fields": {
+            "payment": 1
+        }
+    },
+    {
+        "pk": 5,
+        "model": "loan.paymenttrustevent",
+        "fields": {
+            "payment": 2
+        }
+    },
+    {
+        "pk": 1,
+        "model": "loan.paymentpaidevent",
+        "fields": {
+            "date": "2012-08-06T05:39:18.719Z",
+            "amount": 100.0,
+            "payment": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "loan.paymentpaidevent",
+        "fields": {
+            "date": "2012-08-06T05:57:38.575Z",
+            "amount": 50.0,
+            "payment": 2
+        }
+    },
+    {
+        "pk": 1,
+        "model": "loan.paymentmissedevent",
+        "fields": {
+            "date": "2012-08-06T05:39:44.973Z",
+            "payment": 2
+        }
+    },
+    {
+        "pk": 1,
+        "model": "loan.loandefaultevent",
+        "fields": {
+            "date": "2012-08-06T05:45:37.923Z",
+            "loan": 3
         }
     }
 ]

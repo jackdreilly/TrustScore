@@ -1,4 +1,5 @@
 *.db
 *.idea/
 .ropeproject/
+src
 data_creator.py
