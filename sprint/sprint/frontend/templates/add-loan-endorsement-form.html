@@ -1,4 +1,4 @@
-<form action="{% url frontend:endorsement-add %}" method="POST" class="form-horizontal">
+<form action="{% url frontend:loan-endorsement-add %}" method="POST" class="form-horizontal">
 	<fieldset class="modal-body">
 		{% csrf_token %}
 		{{ form.as_p }}

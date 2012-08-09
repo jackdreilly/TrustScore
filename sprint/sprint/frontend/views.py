@@ -5,6 +5,7 @@ from django.views.generic.edit import CreateView
 from sprint.loan.models import Loan
 from sprint.trust.models import TrustActor
 from sprint.endorsenet.models import Endorsement
+from sprint.frontend.forms import BorrowerEndorsementForm, LoanEndorsementForm
 
 class IndexView(TemplateView):
 
@@ -19,7 +20,8 @@ class IndexView(TemplateView):
 
         context['actor_add_view'] = ActorAddView.as_view()(self.request).render().rendered_content
         context['loan_add_view'] = LoanAddView.as_view()(self.request).render().rendered_content
-        context['endorsement_add_view'] = EndorsementAddView.as_view()(self.request).render().rendered_content
+        context['borrower_endorsement_add_view'] = BorrowerEndorsementAddView.as_view()(self.request).render().rendered_content
+        context['loan_endorsement_add_view'] = LoanEndorsementAddView.as_view()(self.request).render().rendered_content
         return context
 
 class ActorsView(TemplateView):
@@ -36,7 +38,8 @@ class ActorsView(TemplateView):
 
         context['actor_add_view'] = ActorAddView.as_view()(self.request).render().rendered_content
         context['loan_add_view'] = LoanAddView.as_view()(self.request).render().rendered_content
-        context['endorsement_add_view'] = EndorsementAddView.as_view()(self.request).render().rendered_content
+        context['borrower_endorsement_add_view'] = BorrowerEndorsementAddView.as_view()(self.request).render().rendered_content
+        context['loan_endorsement_add_view'] = LoanEndorsementAddView.as_view()(self.request).render().rendered_content
         return context
 
 class LoansView(TemplateView):
@@ -52,7 +55,8 @@ class LoansView(TemplateView):
 
         context['actor_add_view'] = ActorAddView.as_view()(self.request).render().rendered_content
         context['loan_add_view'] = LoanAddView.as_view()(self.request).render().rendered_content
-        context['endorsement_add_view'] = EndorsementAddView.as_view()(self.request).render().rendered_content
+        context['borrower_endorsement_add_view'] = BorrowerEndorsementAddView.as_view()(self.request).render().rendered_content
+        context['loan_endorsement_add_view'] = LoanEndorsementAddView.as_view()(self.request).render().rendered_content
         return context
 
 
@@ -80,7 +84,14 @@ class LoanAddView(CreateView):
     model = Loan
     success_url = "/"
 
-class EndorsementAddView(CreateView):
-    template_name = "add-endorsement-form.html"
+class LoanEndorsementAddView(CreateView):
+    template_name = "add-loan-endorsement-form.html"
     model = Endorsement
     success_url = "/"
+    form_class = LoanEndorsementForm
+
+class BorrowerEndorsementAddView(CreateView):
+    template_name = "add-borrower-endorsement-form.html"
+    model = Endorsement
+    success_url = "/"
+    form_class = BorrowerEndorsementForm
