@@ -9,7 +9,7 @@
 	<!--h2>Loans</h2-->
 </header>
 <div class="content-body">
-	<table class="table table-striped tablesorter">
+	<table class="table table-striped tablesorter" id="loan-table">
 		<thead>
 			<tr>
 				<th>Description</th>
@@ -22,8 +22,8 @@
 			{% for loan in loans %}
 			<tr>
 				<td><a href="{% url frontend:loan-detail loan.pk %}">{{loan.description}}</a></td>
-				<td>{{loan.actor.name}}</td>
-				<td>${{loan.amount|floatformat:2}}</td>
+				<td><a href="{% url frontend:actor-detail loan.actor.pk %}">{{loan.actor.name}}</a></td>
+				<td><span class="label label-amount">${{loan.amount|floatformat:2}}</span></td>
 				<td>{% loan_status_label loan %}</td>
 			</tr>
 			{% endfor %}

@@ -6,6 +6,7 @@
 	<form class="form-search pull-right">
 		<input type="text" class="search-query" placeholder="Search Agents">
 	</form>
+	<!-- class="btn pull-right" href="#quick-add-agent-modal" data-toggle="modal"><i class="icon-add">+</i></a-->
 	<!--h2>Agents</h2-->
 </header>
 <div class="content-body">
@@ -22,14 +23,14 @@
 			{% for actor in actors %}
 			<tr>
 				<td><a href="{% url frontend:actor-detail actor.pk %}">{{actor.name}}</a></td>
-				<td><span>{{actor.trust_score|floatformat:2}}</span></td>
+				<td><span class="label label-score">{{actor.trust_score|floatformat:2}}</span></td>
 				<td>
 					<div class="dropdown">
 						<a href="" class="btn dropdown-toggle" data-toggle="dropdown">{{actor.loans|length}} <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							{% for loan in actor.loans.all %}
 							<li>
-								<a href="{% url frontend:loan-detail loan.pk %}">{{loan.description}} <span>${{loan.amount|floatformat:2}} | {% loan_status_label loan %}</span></a>
+								<a href="{% url frontend:loan-detail loan.pk %}">{{loan.description}} <span><span class="label label-amount">${{loan.amount|floatformat:2}}</span> {% loan_status_label loan %}</span></a>
 							</li>
 							{% endfor %}
 						</ul>

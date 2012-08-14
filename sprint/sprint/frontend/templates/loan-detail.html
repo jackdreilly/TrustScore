@@ -2,8 +2,14 @@
 {% load trust %}
 
 {% block content %}
-<h1>Loan {{loan.pk}}</h1>
-<h2>Agent: {{loan.actor.name}}</h2>
-<h2>Trust Graph</h2>
-{% trust_history_graph loan.actor %}
+<header class="content-header graph-header">
+	<h2 class="pull-left">Loan {{loan.pk}}<span>Agent: {{loan.actor.name}}</span></h2>
+	<!--h3 class="pull-right">Trust Graph</h3-->
+</header>
+<div class="content-body">
+	<div id="loan-graph" class="graph-container">
+		{% trust_history_graph loan.actor %}
+	</div>
+	<h3>Loan History</h3>
+</div>
 {% endblock content %}
