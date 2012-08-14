@@ -75,6 +75,19 @@ function graph_history(history) {
   }
 
 
-$(document).ready(function() { 
+$(document).ready(function() {
+
+  // call table sorter and attach to all tables with class ".tablesorter"
   $(".tablesorter").tablesorter();
+  $("#actor-table").tablesorter(
+      { headers: {3: {sorter:false} }  }
+  );
+  
+  // agents - on row click, open subsequent hidden row showing loan information
+  /* code doesn't work
+  $("tr.click").click(function() {
+    $("tr.hide").next().show();
+  )};*/
 });
+
+
