@@ -74,3 +74,7 @@ function graph_history(history) {
     });
   }
 
+
+$(document).ready(function() { 
+  $(".tablesorter").tablesorter();
+});
