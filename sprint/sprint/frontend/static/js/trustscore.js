@@ -50,7 +50,7 @@ function graph_history(history) {
   }).attr("cy", function(d) {
     return y(d);
   }).on('mouseover', function(d,i) {
-    d3.select(this).attr('r', 30);
+    d3.select(this).attr('r', 12);
     d3.select(this).attr('class', 'point max');
   }).on('mouseout', function() {
     d3.select(this).attr('r', 10);

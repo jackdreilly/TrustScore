@@ -61,10 +61,10 @@ td > .label .label {line-height:28px;}
 .graph-header h2 {background:#fff; position:relative; top:15px; left:15px; padding:3px 8px;}
 .graph-header h2 span {padding-left:2em;}
 /*.graph-header h3 {line-height:36px; position:relative; top:15px; right:15px;}*/
-.graph-container {background:#ddd; border:1px solid #d5d5d5; padding:45px 0;}
+.graph-container {background:#f2f2f2; border:1px solid #e9e9e9; padding:45px 0;}
 
 /* similar to .accordion-toggle */
-.content-body h3 {padding:27px 0 6px; font-weight:bold; text-transform:uppercase; color:#666; border-bottom:1px solid #eee; font-size:15px;}
+.content-body h3 {padding:27px 0 6px; margin-bottom:15px; font-weight:bold; text-transform:uppercase; color:#666; border-bottom:1px solid #e9e9e9; font-size:15px;}
 
 
 /* structure-specific
@@ -205,9 +205,6 @@ path {
   stroke: rgb(255,255,255);
 }
 
-.point.max {
-  stroke: rgb(50,50,50);
-  stroke-width: 0;
-}
+.point.max {stroke:rgb(0,0,0);}
 
 /* end svg stuff */
