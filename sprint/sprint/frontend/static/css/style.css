@@ -3,7 +3,11 @@
 body {margin:0; background:#ed740c url(../img/bg-inverse.png) fixed;}
 input[type="search"],
 input.search-query {padding:6px 11px; border-radius:20px;}
-td {overflow:visible;}
+td {overflow:visible; vertical-align:baseline;}
+td > a,
+td > span,
+td > .label,
+td > .label .label {line-height:28px;}
 
 
 /* global bootstrap classes
@@ -43,7 +47,7 @@ td {overflow:visible;}
 .tablesorter th.headerSortUp:after {display:none;}
 .tablesorter th.headerSortDown:after,
 .tablesorter th.headerSortUp:before {top:15px;}
-.tablesorter td > a {display:block; padding:4px 0 5px; font-size:14px; border-radius:3px;}
+.tablesorter td > a {display:block; font-size:14px; border-radius:3px;}
 .tablesorter td > a:hover {background:#eee;}
 
 
