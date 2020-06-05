@@ -1,4 +1,4 @@
-Django==1.4
+Django==1.11.29
 -e git+https://github.com/dyve/django-bootstrap-toolkit.git@669bae64e748dee031a4db081518fecfbf5a1ed1#egg=django_bootstrap_toolkit-dev
 django-dajax==0.8.4
 django-dajaxice==0.2
